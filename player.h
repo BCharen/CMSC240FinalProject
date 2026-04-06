@@ -1,6 +1,6 @@
-
 #ifndef player_h
 #define player_h
+
 #include <raylib.h>
 #include <iostream>
 using namespace std;
@@ -25,7 +25,6 @@ class player{
         }
         void Update(){
             velocity.x = lrInputCheck();
-            cout << velocity.x << endl;
             position.x+=velocity.x;
             position.y+=velocity.y;
         }

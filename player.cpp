@@ -1,4 +1,5 @@
 #include "player.h"
+
 bool player::collisionCheck(int dir,Rectangle otherRect){
     if(!CheckCollisionRecs(position,otherRect)){
         velocity.y= 5;
@@ -37,11 +38,11 @@ void player::collide(Rectangle otherRect){
 }
 
 int player::lrInputCheck(){
-    if(IsKeyDown(KEY_LEFT)){
+    if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
         return -5;
     }
 
-    else if(IsKeyDown(KEY_RIGHT)){
+    else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
         return 5;
     }
     else { 
