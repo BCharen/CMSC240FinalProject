@@ -23,8 +23,8 @@ void player::collisionCheck(Rectangle otherRect){
         
 }
 
-void player::collide(Rectangle otherRect){
-    
+bool player::keyCheck(Rectangle otherRect){
+    return !CheckCollisionRecs(position,otherRect);
 }
 
 void player::lrInputCheck(){

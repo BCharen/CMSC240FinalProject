@@ -21,7 +21,7 @@ class player{
 
     public:
         void collisionCheck(Rectangle otherRect);
-        void collide(Rectangle otherRect);
+        bool keyCheck(Rectangle otherRect);
         void Draw(){
             DrawRectangleRec(position,{23,47,63,255});
         }

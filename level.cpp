@@ -2,8 +2,17 @@
 #include "raymath.h"
 #include <vector>
 using namespace std;
+
+struct hideableObject {
+    Rectangle shape;
+    bool show = true;
+};
+
 struct level {
     vector<Rectangle> walls;
-    vector<Rectangle> keys;
-    vector<Rectangle> doors;
+    vector<hideableObject> keys;
+    vector<hideableObject> doors;
 };
+
+
+
