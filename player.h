@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 enum Directions{
-    ERROR = -1,
+    NONE = -1,
     UP,
     LEFT,
     DOWN,
@@ -17,16 +17,26 @@ class player{
     //x,y,width,height
         Rectangle position = {500,500,50,100};
         Vector2 velocity = {0,5};
+        int VertColDir = NONE;
+        int HorColDir = NONE;
     public:
-        bool collisionCheck(int dir,Rectangle otherRect);
+        void collisionCheck(Rectangle otherRect);
         void collide(Rectangle otherRect);
         void Draw(){
             DrawRectangleRec(position,{23,47,63,255});
         }
         void Update(){
             velocity.x = lrInputCheck();
-            position.x+=velocity.x;
+            if(IsKeyDown(KEY_W)) { velocity.y = -5;} else { velocity.y=5;}
+            if(!((VertColDir == UP && velocity.y <= 0)||(VertColDir == DOWN && velocity.y >= 0))){
             position.y+=velocity.y;
+            }
+            if(!((VertColDir == LEFT && velocity.x <= 0)||(VertColDir == RIGHT && velocity.x <= 0))){
+            position.x+=velocity.x;
+            }
+
+            VertColDir = NONE;
+            HorColDir = NONE;
         }
         int lrInputCheck();
 };

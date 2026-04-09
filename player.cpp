@@ -1,36 +1,26 @@
 #include "player.h"
 
-bool player::collisionCheck(int dir,Rectangle otherRect){
+void player::collisionCheck(Rectangle otherRect){
     if(!CheckCollisionRecs(position,otherRect)){
-        velocity.y= 5;
-        return false;
+        //velocity.y= 5;
+        return;
     }
-    switch (dir)
-    {
-    /*case UP:
-        cout << "UP" << endl;
-        if(otherRect.y+otherRect.height <= position.y && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
-        return true;
+
+       
+    if(otherRect.y+otherRect.height <= position.y && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
+        VertColDir = UP;
+        velocity.y = 0;
         }
-    case LEFT:
-        cout << "LEFT" << endl;
-        return true;*/
-    case DOWN:
-        cout << "DOWN" << endl;
-        if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
-            position.y = otherRect.y-position.height+1;
-            velocity.y=0;
-            return true;   
+    else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
+        velocity.y=0;
+        VertColDir = DOWN;
         }
+
     /*case RIGHT:
         cout << "RIGHT" << endl;
         return true;
         */
-    default:
-        cout << "DEFAULT" << endl;
-        return false;
-        break;
-    }
+        
 }
 
 void player::collide(Rectangle otherRect){

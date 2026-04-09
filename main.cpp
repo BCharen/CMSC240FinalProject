@@ -9,13 +9,14 @@ Color darkGreen = {43, 51, 24, 255};
 bool over=false;
 player zippy = player();
 
-level level1 = {{Rectangle{450,800,100,50} , Rectangle{600,1200,300,50}},{},{},{}};
+level level1 = {{Rectangle{450,800,100,50} , Rectangle{600,1200,300,50}},{},{}};
 
 void updateEnvironment(){
-    for (int i = 0; i < level1.floors.size(); i++){
-        DrawRectangleRec(level1.floors[i],{42,2,57,255});
+    for (int i = 0; i < level1.walls.size(); i++){
+        DrawRectangleRec(level1.walls[i],{42,2,57,255});
 
-        zippy.collisionCheck(DOWN,level1.floors[i]);
+        zippy.collisionCheck(level1.walls[i]);
+        zippy.collisionCheck(level1.walls[i]);
     }
 } 
 
