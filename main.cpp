@@ -16,11 +16,11 @@ void updateEnvironment(){
         DrawRectangleRec(level1.walls[i],{42,2,57,255});
         zippy.collisionCheck(level1.walls[i]);
     }
-    for (int i = 0; i < level1.walls.size(); i++){
+    for (int i = 0; i < level1.keys.size(); i++){
         DrawRectangleRec(level1.keys[i],{242,132,17,255});
         //zippy.collisionCheck(level1.keys[i]);
     }
-    for (int i = 0; i < level1.walls.size(); i++){
+    for (int i = 0; i < level1.doors.size(); i++){
         DrawRectangleRec(level1.doors[i],{72,128,7,255});
         //zippy.collisionCheck(level1.doors[i]);
     }
@@ -36,6 +36,7 @@ int main () {
         BeginDrawing();
             ClearBackground(BLACK);
             zippy.Draw();
+            zippy.lrInputCheck();
             updateEnvironment();
             zippy.Update();
             

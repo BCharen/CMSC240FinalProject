@@ -2,24 +2,24 @@
 
 void player::collisionCheck(Rectangle otherRect){
     if(!CheckCollisionRecs(position,otherRect)){
-        //velocity.y= 5;
         return;
     }
 
-       
-    if(otherRect.y+otherRect.height <= position.y && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
+    if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=10) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
-        velocity.y = 0;
         }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
-        velocity.y=0;
         VertColDir = DOWN;
         }
 
-    /*case RIGHT:
-        cout << "RIGHT" << endl;
-        return true;
-        */
+    if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=10) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
+        HorColDir = LEFT;
+        }
+    else if(otherRect.x <= position.x+position.width && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
+        HorColDir = RIGHT;
+        }
+
+    
         
 }
 
@@ -27,15 +27,16 @@ void player::collide(Rectangle otherRect){
     
 }
 
-int player::lrInputCheck(){
+void player::lrInputCheck(){
     if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
-        return -5;
+        velocity.x = -5;
     }
 
     else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
-        return 5;
+        velocity.x = 5;
     }
     else { 
-        return 0;
+        velocity.x =  0;
     }
+    if(IsKeyDown(KEY_W)) {velocity.y= -5;} else  {velocity.y = 5;} 
 }

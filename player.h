@@ -11,7 +11,6 @@ enum Directions{
     DOWN,
     RIGHT
 };
-
 class player{
     private:
     //x,y,width,height
@@ -19,6 +18,7 @@ class player{
         Vector2 velocity = {0,5};
         int VertColDir = NONE;
         int HorColDir = NONE;
+
     public:
         void collisionCheck(Rectangle otherRect);
         void collide(Rectangle otherRect);
@@ -26,18 +26,19 @@ class player{
             DrawRectangleRec(position,{23,47,63,255});
         }
         void Update(){
-            velocity.x = lrInputCheck();
-            if(IsKeyDown(KEY_W)) { velocity.y = -5;} else { velocity.y=5;}
-            if(!((VertColDir == UP && velocity.y <= 0)||(VertColDir == DOWN && velocity.y >= 0))){
+            
+            
+            
+            if(!((VertColDir == UP && velocity.y < 0)||(VertColDir == DOWN && velocity.y > 0))){
             position.y+=velocity.y;
             }
-            if(!((VertColDir == LEFT && velocity.x <= 0)||(VertColDir == RIGHT && velocity.x <= 0))){
+            if(!((HorColDir == LEFT && velocity.x < 0)||(HorColDir == RIGHT && velocity.x > 0))){
             position.x+=velocity.x;
             }
 
             VertColDir = NONE;
             HorColDir = NONE;
         }
-        int lrInputCheck();
+        void lrInputCheck();
 };
 #endif
