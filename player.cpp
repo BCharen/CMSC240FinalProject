@@ -56,3 +56,11 @@ void player::lrInputCheck(){
         velocity.y=5;
     }
 }
+
+void player::startZip(Vector2 start, Vector2 end){
+    position.x = start.x;
+    position.y = start.y;
+    zipVelocity = {(end.x-start.x)/100,(end.y-start.y)/100};
+    zipTarget = end;
+    onZip = true;
+}

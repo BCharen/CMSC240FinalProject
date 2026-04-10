@@ -14,9 +14,12 @@ enum Directions{
 class player{
     private:
         Vector2 velocity = {0,5};
+        Vector2 zipVelocity;
         int VertColDir = NONE;
         int HorColDir = NONE;
         bool onLadder = false;
+        bool onZip = false;
+        Vector2 zipTarget;
     public:
         //x,y,width,height
         Rectangle position = {500,500,50,100};
@@ -28,10 +31,10 @@ class player{
         }
         bool getOnLadder();
         void setOnLadder(bool val);
+        void startZip(Vector2 start, Vector2 end);
         void Update(){
-            
-            
-            
+            if(!onZip){
+
             if(!((VertColDir == UP && velocity.y < 0)||(VertColDir == DOWN && velocity.y > 0))){
             position.y+=velocity.y;
             }
@@ -42,6 +45,14 @@ class player{
             VertColDir = NONE;
             HorColDir = NONE;
             onLadder = false;
+            }
+            else {
+                position.y+=zipVelocity.y;
+                position.x+=zipVelocity.x;
+                if(position.x == zipTarget.x && position.y == zipTarget.y){
+                    onZip = false;
+                }
+            }
         }
         void lrInputCheck();
 };
