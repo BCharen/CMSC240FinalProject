@@ -6,8 +6,6 @@
 #include "level.cpp"
 using namespace std;
 
-bool win = false;
-
 int screenWidth = 1500;
 int screenHeight = 1500;
 Color darkGreen = {43, 51, 24, 255};
@@ -48,6 +46,8 @@ Vector2 getZipEnd(zipline zip){
 
 void updateEnvironment(level curLevel){
 
+    //check for falling off the map
+    int lowestPoint = INFINITY;
 
     //Draw Pib texture
     Rectangle source = (Rectangle){0, 0, 767, 603};
@@ -56,7 +56,7 @@ void updateEnvironment(level curLevel){
 
     //temporary implementation of win state
     if (zippy.overlapCheck(dest)){
-        win = true;
+        zippy.changeWinState(true);
     }
 
     for (int i = 0; i < level1.ladders.size(); i++){
@@ -121,7 +121,7 @@ int main () {
     while (WindowShouldClose() == false){
 
         //temporary implementation of win state
-        if(win){
+        if(zippy.checkWin()){
             curText = -2;
         }
         updateCam(&cam, &zippy);

@@ -19,10 +19,19 @@ class player{
         int HorColDir = NONE;
         bool onLadder = false;
         bool onZip = false;
+        bool win = false;
+        bool dead = false;
         Vector2 zipTarget;
     public:
         //x,y,width,height
         Rectangle position = {500,500,50,100};
+
+        bool checkWin();
+        void changeWinState(bool isWin);
+        bool isDead();
+        void changeDeadState(bool isDead);
+        
+
         void collisionCheck(Rectangle otherRect);
         bool keyCheck(Rectangle otherRect);
         bool overlapCheck(Rectangle otherRect);

@@ -66,3 +66,19 @@ void player::startZip(Vector2 start, Vector2 end){
     onZip = true;
     }
 }
+
+bool player::checkWin(){
+    return win;
+}
+
+void player::changeWinState(bool isWin){
+    win = isWin;
+}
+
+bool player::isDead(){
+    return dead;
+}
+
+void player::changeDeadState(bool isDead){
+    dead = isDead;
+}
