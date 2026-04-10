@@ -12,6 +12,8 @@ struct level {
     vector<Rectangle> walls;
     vector<hideableObject> keys;
     vector<hideableObject> doors;
+    vector<Rectangle> ladders;
+    vector<Rectangle> messages;   
 };
 
 

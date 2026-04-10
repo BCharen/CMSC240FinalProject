@@ -13,18 +13,21 @@ enum Directions{
 };
 class player{
     private:
-    //x,y,width,height
-        Rectangle position = {500,500,50,100};
         Vector2 velocity = {0,5};
         int VertColDir = NONE;
         int HorColDir = NONE;
-
+        bool onLadder = false;
     public:
+        //x,y,width,height
+        Rectangle position = {500,500,50,100};
         void collisionCheck(Rectangle otherRect);
         bool keyCheck(Rectangle otherRect);
+        bool overlapCheck(Rectangle otherRect);
         void Draw(){
             DrawRectangleRec(position,{23,47,63,255});
         }
+        bool getOnLadder();
+        void setOnLadder(bool val);
         void Update(){
             
             
@@ -38,6 +41,7 @@ class player{
 
             VertColDir = NONE;
             HorColDir = NONE;
+            onLadder = false;
         }
         void lrInputCheck();
 };

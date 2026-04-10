@@ -7,15 +7,15 @@ void player::collisionCheck(Rectangle otherRect){
 
     if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=10) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
-        }
+    }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
-        VertColDir = DOWN;
+        if(!onLadder) {VertColDir = DOWN; }
         }
 
     if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=10) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = LEFT;
         }
-    else if(otherRect.x <= position.x+position.width && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
+    else if(otherRect.x <= position.x+position.width && (position.x+position.width-otherRect.x<=10) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = RIGHT;
         }
 
@@ -27,6 +27,17 @@ bool player::keyCheck(Rectangle otherRect){
     return !CheckCollisionRecs(position,otherRect);
 }
 
+bool player::overlapCheck(Rectangle otherRect){
+    return CheckCollisionRecs(position,otherRect);
+}
+
+bool player::getOnLadder(){
+    return onLadder;
+}
+
+void player::setOnLadder(bool val){
+    onLadder = val;
+}
 void player::lrInputCheck(){
     if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
         velocity.x = -5;
@@ -38,5 +49,10 @@ void player::lrInputCheck(){
     else { 
         velocity.x =  0;
     }
-    if(IsKeyDown(KEY_W)) {velocity.y= -5;} else  {velocity.y = 5;} 
+    if(onLadder){
+        if(IsKeyDown(KEY_W)) {velocity.y= -5;} else if (IsKeyDown(KEY_S)){velocity.y = 5;} else { velocity.y = 0;}
+    }
+    else{
+        velocity.y=5;
+    }
 }
