@@ -50,7 +50,7 @@ void player::lrInputCheck(){
         velocity.x =  0;
     }
     if(onLadder){
-        if(IsKeyDown(KEY_W)) {velocity.y= -5;} else if (IsKeyDown(KEY_S)){velocity.y = 5;} else { velocity.y = 0;}
+        if(IsKeyDown(KEY_W)||IsKeyDown(KEY_UP)) {velocity.y= -5;} else if (IsKeyDown(KEY_S)||IsKeyDown(KEY_DOWN)){velocity.y = 5;} else { velocity.y = 0;}
     }
     else{
         velocity.y=5;

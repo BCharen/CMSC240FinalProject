@@ -18,7 +18,6 @@ Texture2D pib;
 
 //messages
 int curText = -1;
-char testMessage[] = "test";
 /*
 Each line is a different type of object. In order they are:
 walls: Rectangle for position.
