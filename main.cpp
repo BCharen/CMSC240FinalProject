@@ -5,11 +5,16 @@
 #include <array>
 #include "level.cpp"
 using namespace std;
+
+bool win = false;
+
 int screenWidth = 1500;
 int screenHeight = 1500;
 Color darkGreen = {43, 51, 24, 255};
 player zippy = player();
 Camera2D cam = { 0 };
+
+Texture2D pib;
 
 //messages
 int curText = -1;
@@ -24,12 +29,12 @@ messages: Rectangle for position. Must put a string message in the switch case a
 zips: Rectangle for start location, Rectangle for end location.
 */
 level level1 = {
-{ Rectangle{450,800,100,50} , Rectangle{600,1200,300,50} },
-{ hideableObject{650,800,100,50} },
-{ hideableObject{650,500,100,50} },
-{ Rectangle{425,500,50,700} },
-{ Rectangle{425,475,25,25} },
-{ {Rectangle{200,200,25,100},Rectangle{300,700,25,100}} }
+{ Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} },  
+{ hideableObject{50,550,30,10} , hideableObject{0,550,30,10}},
+{ hideableObject{300,450,25,150} , hideableObject{3500,650,25,150}},
+{ Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
+{ Rectangle{600,550,25,25} , {3450,750,25,25}},
+{ {Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , {Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}}
 };
 
 Vector2 getZipStart(zipline zip){
@@ -43,6 +48,17 @@ Vector2 getZipEnd(zipline zip){
 }
 
 void updateEnvironment(level curLevel){
+
+
+    //Draw Pib texture
+    Rectangle source = (Rectangle){0, 0, 767, 603};
+    Rectangle dest = (Rectangle){3600, 740, 50, 50};
+    DrawTexturePro(pib, source, dest, (Vector2){25, 25}, 45 * GetTime(),  WHITE);
+
+    //temporary implementation of win state
+    if (zippy.overlapCheck(dest)){
+        win = true;
+    }
 
     for (int i = 0; i < level1.ladders.size(); i++){
         if(!zippy.getOnLadder()){
@@ -95,8 +111,20 @@ int main () {
     cam.rotation = 0;
     cam.zoom = 1.0f;
     InitWindow(screenWidth,screenHeight, "Zipline Zim");
+
+    /*
+    Load textures
+    */
+
+    pib = LoadTexture("textures/pibble.png"); 
+
     SetTargetFPS(60);
     while (WindowShouldClose() == false){
+
+        //temporary implementation of win state
+        if(win){
+            curText = -2;
+        }
         updateCam(&cam, &zippy);
         BeginDrawing();
             ClearBackground(BLACK);
@@ -107,19 +135,27 @@ int main () {
             zippy.lrInputCheck();
             zippy.Update();
             EndMode2D();
-            }
-            else{
+            } else{
                 //add cases for each message corresponding to index number. Just copy my text and replace the text and case number.
                 
                 switch (curText) {
                     case 0:
-                        DrawText("test",screenWidth/2,screenHeight/2,50,{255,255,255,255});
+                        DrawText("I need to find pibble, but how?",screenWidth/2 - 330,screenHeight/2,50,{255,255,255,255});
                         break;    
+                    case 1:
+                        DrawText("There he is! how do I unlock this door?",screenWidth/2 - 410,screenHeight/2,50,{255,255,255,255});
+                        break; 
+
+                    //win message
+                    case -2:
+                        DrawText("You found pibble! Win or something",screenWidth/2 - 330,screenHeight/2,50,{255,255,255,255});
                     
                     
                 }
                 if (IsKeyPressed(KEY_SPACE)){curText = -1;};
-            }  
+             
+            }
+
         EndDrawing();
     }    
 
