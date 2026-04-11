@@ -6,6 +6,8 @@
 #include "level.cpp"
 using namespace std;
 
+#define KILLZONE 1400
+
 int screenWidth = 1500;
 int screenHeight = 1500;
 Color darkGreen = {43, 51, 24, 255};
@@ -27,12 +29,20 @@ zips: Rectangle for start location, Rectangle for end location.
 */
 level level1 = {
 { Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} },  
-{ hideableObject{50,550,30,10} , hideableObject{0,550,30,10}},
-{ hideableObject{300,450,25,150} , hideableObject{3500,650,25,150}},
+{ key{Rectangle{50,550,30,10}} , key{Rectangle{0,550,30,10}}},
+{ door{Rectangle{300,450,25,150}} , door{Rectangle{3500,650,25,150}}},
 { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
 { Rectangle{600,550,25,25} , {3450,750,25,25}},
 { {Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , {Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}}
 };
+
+
+
+void restartLevel(level &lvl){
+    for (auto &key : lvl.keys){
+        key.show = true;
+    }
+}
 
 Vector2 getZipStart(zipline zip){
     Rectangle pole = zip.pole1;
@@ -44,10 +54,7 @@ Vector2 getZipEnd(zipline zip){
     return (Vector2){pole.x+(pole.width/2),pole.y};
 }
 
-void updateEnvironment(level curLevel){
-
-    //check for falling off the map
-    int lowestPoint = INFINITY;
+void updateEnvironment(level &curLevel){
 
     //Draw Pib texture
     Rectangle source = (Rectangle){0, 0, 767, 603};
@@ -59,42 +66,51 @@ void updateEnvironment(level curLevel){
         zippy.changeWinState(true);
     }
 
-    for (int i = 0; i < level1.ladders.size(); i++){
+    //temporary implementation of dead state
+    if (zippy.position.y > KILLZONE){
+        zippy.changeDeadState(true);
+    }
+
+    for (auto &ladder : curLevel.ladders){
         if(!zippy.getOnLadder()){
-            zippy.setOnLadder(zippy.overlapCheck(level1.ladders[i]));
+            zippy.setOnLadder(zippy.overlapCheck(ladder));
         }
-        DrawRectangleRec(level1.ladders[i],{32,0,200,255});
-    }
-    for (int i = 0; i < level1.walls.size(); i++){
-        DrawRectangleRec(level1.walls[i],{42,2,57,255});
-        zippy.collisionCheck(level1.walls[i]);
-    }
-    for (int i = 0; i < level1.keys.size(); i++){
-        if(level1.keys[i].show == true){
-        DrawRectangleRec(level1.keys[i].shape,{242,132,17,255});
-        level1.keys[i].show = zippy.keyCheck(level1.keys[i].shape);
-        level1.doors[i].show = zippy.keyCheck(level1.keys[i].shape);
-        }
-    }
-    for (int i = 0; i < level1.doors.size(); i++){
-        if(level1.doors[i].show == true){
-            DrawRectangleRec(level1.doors[i].shape,{72,128,7,255});
-            zippy.collisionCheck(level1.doors[i].shape);
-        }
-        
+        DrawRectangleRec(ladder,{32,0,200,255});
     }
 
-    for (int i = 0; i < level1.messages.size(); i++){
-        if(zippy.overlapCheck(level1.messages[i])){ if(IsKeyPressed(KEY_SPACE)){curText = i;}}
-        DrawRectangleRec(level1.messages[i],{255,255,255,255});
+    for (auto &wall : curLevel.walls){
+        DrawRectangleRec(wall,{42,2,57,255});
+        zippy.collisionCheck(wall);
     }
 
-    for (int i = 0; i < level1.zips.size(); i++){
-        DrawRectangleRec(level1.zips[i].pole1,DARKGREEN);
-        if(zippy.overlapCheck(level1.zips[i].pole1)){ if(IsKeyPressed(KEY_SPACE)){zippy.startZip(getZipStart(level1.zips[i]),getZipEnd(level1.zips[i]));}}
-        DrawRectangleRec(level1.zips[i].pole2,DARKGREEN);
-        if(zippy.overlapCheck(level1.zips[i].pole2)){ if(IsKeyPressed(KEY_SPACE)){zippy.startZip(getZipEnd(level1.zips[i]),getZipStart(level1.zips[i]));}}
-        DrawLineEx(getZipStart(level1.zips[i]),getZipEnd(level1.zips[i]),10,DARKGREEN);
+    for (auto &key : curLevel.keys){
+        if(key.show == true){
+        DrawRectangleRec(key.shape,{242,132,17,255});
+        key.show = zippy.keyCheck(key.shape);
+        }
+    }
+
+    for (auto &door : curLevel.doors){
+        if(door.correspondingKey != nullptr){
+            door.show = door.correspondingKey->show; 
+        }
+        if(door.show == true){
+            DrawRectangleRec(door.shape,{72,128,7,255});
+            zippy.collisionCheck(door.shape);
+        }
+    }
+
+    for (int i = 0; i < (int)curLevel.messages.size(); i++){
+        if(zippy.overlapCheck(curLevel.messages[i])){ if(IsKeyPressed(KEY_SPACE)){curText = i;}}
+        DrawRectangleRec(curLevel.messages[i],{255,255,255,255});
+    }
+
+    for (auto &zip : curLevel.zips){
+        DrawRectangleRec(zip.pole1,DARKGREEN);
+        if(zippy.overlapCheck(zip.pole1)){ if(IsKeyPressed(KEY_SPACE)){zippy.startZip(getZipStart(zip),getZipEnd(zip));}}
+        DrawRectangleRec(zip.pole2,DARKGREEN);
+        if(zippy.overlapCheck(zip.pole2)){ if(IsKeyPressed(KEY_SPACE)){zippy.startZip(getZipEnd(zip),getZipStart(zip));}}
+        DrawLineEx(getZipStart(zip),getZipEnd(zip),10,DARKGREEN);
     }
 
         
@@ -117,13 +133,36 @@ int main () {
 
     pib = LoadTexture("textures/pibble.png"); 
 
+
+    //connect doors and keys
+
+    level1.doors[0].correspondingKey = &level1.keys[0];
+    level1.doors[1].correspondingKey = &level1.keys[1];
+
+
     SetTargetFPS(60);
     while (WindowShouldClose() == false){
 
         //temporary implementation of win state
         if(zippy.checkWin()){
-            curText = -2;
+            //win message
+            curText = -3;
         }
+
+        //temporary implementation of dead state
+        if(zippy.isDead()){
+            //dead message
+            curText = -2;
+            if (IsKeyPressed(KEY_SPACE)){
+                restartLevel(level1);
+                zippy.changeDeadState(false);
+                zippy.position.x = 500;
+                zippy.position.y = 500;
+            }
+        }
+        
+        
+
         updateCam(&cam, &zippy);
         BeginDrawing();
             ClearBackground(BLACK);
@@ -138,17 +177,18 @@ int main () {
                 //add cases for each message corresponding to index number. Just copy my text and replace the text and case number.
                 
                 switch (curText) {
+                    case -3:
+                        DrawText("You found pibble! Win or something",screenWidth/2 - 350,screenHeight/2,50,{255,255,255,255});
+                        break;
+                    case -2:
+                        DrawText("You fell off the map :(",screenWidth/2 - 290,screenHeight/2,50,{255,255,255,255});
+                        break;
                     case 0:
                         DrawText("I need to find pibble, but how?",screenWidth/2 - 330,screenHeight/2,50,{255,255,255,255});
                         break;    
                     case 1:
                         DrawText("There he is! how do I unlock this door?",screenWidth/2 - 410,screenHeight/2,50,{255,255,255,255});
                         break; 
-
-                    //win message
-                    case -2:
-                        DrawText("You found pibble! Win or something",screenWidth/2 - 330,screenHeight/2,50,{255,255,255,255});
-                    
                     
                 }
                 if (IsKeyPressed(KEY_SPACE)){curText = -1;};

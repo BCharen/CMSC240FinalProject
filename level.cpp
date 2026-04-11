@@ -8,6 +8,18 @@ using namespace std;
 struct hideableObject {
     Rectangle shape;
     bool show = true;
+
+    hideableObject(Rectangle r) : shape(r) {}
+};
+
+struct key : hideableObject{
+    using hideableObject::hideableObject;
+};
+
+struct door : hideableObject{
+    key* correspondingKey = nullptr;
+
+    using hideableObject::hideableObject;
 };
 
 struct zipline{
@@ -17,8 +29,8 @@ struct zipline{
 
 struct level {
     vector<Rectangle> walls;
-    vector<hideableObject> keys;
-    vector<hideableObject> doors;
+    vector<key> keys;
+    vector<door> doors;
     vector<Rectangle> ladders;
     vector<Rectangle> messages;
     vector<zipline> zips; 
