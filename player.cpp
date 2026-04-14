@@ -19,8 +19,6 @@ void player::collisionCheck(Rectangle otherRect){
         HorColDir = RIGHT;
         }
 
-    
-        
 }
 
 bool player::keyCheck(Rectangle otherRect){
@@ -46,9 +44,11 @@ void player::lrInputCheck(){
     else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
         velocity.x = 5;
     }
-    else { 
+
+    else {
         velocity.x =  0;
     }
+
     if(onLadder){
         if(IsKeyDown(KEY_W)||IsKeyDown(KEY_UP)) {velocity.y= -5;} else if (IsKeyDown(KEY_S)||IsKeyDown(KEY_DOWN)){velocity.y = 5;} else { velocity.y = 0;}
     }

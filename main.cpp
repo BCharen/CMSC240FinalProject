@@ -8,6 +8,8 @@ using namespace std;
 
 #define KILLZONE 1400
 
+Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
+
 int screenWidth = 1500;
 int screenHeight = 1500;
 Color darkGreen = {43, 51, 24, 255};
@@ -15,6 +17,7 @@ player zippy = player();
 Camera2D cam = { 0 };
 
 Texture2D pib;
+Texture2D labDoor;
 
 //messages
 int curText = -1;
@@ -91,11 +94,15 @@ void updateEnvironment(level &curLevel){
     }
 
     for (auto &door : curLevel.doors){
-        if(door.correspondingKey != nullptr){
-            door.show = door.correspondingKey->show; 
+        if(door.correspondingKey != nullptr && door.correspondingKey->show == false && zippy.overlapCheck(door.shape)){
+            if (zippy.overlapCheck(door.shape)){
+                DrawTexturePro(labDoor, labDoorDimensions, Rectangle{door.shape.x, door.shape.y, 75, 150}, (Vector2){0, 0}, 0,  WHITE);
+            } else {
+
+            }
         }
-        if(door.show == true){
-            DrawRectangleRec(door.shape,{72,128,7,255});
+        else{
+            DrawRectangleRec(door.shape, GRAY);
             zippy.collisionCheck(door.shape);
         }
     }
@@ -132,6 +139,7 @@ int main () {
     */
 
     pib = LoadTexture("textures/pibble.png"); 
+    labDoor = LoadTexture("textures/door.png"); 
 
 
     //connect doors and keys
