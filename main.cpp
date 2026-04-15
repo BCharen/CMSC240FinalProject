@@ -6,7 +6,7 @@
 #include "level.cpp"
 using namespace std;
 
-#define TEST true
+#define TEST false
 
 #define KILLZONE 1400
 
@@ -46,7 +46,7 @@ objectiveCoordinates: Coordinate of objective
 level testLevel = {
 { Rectangle{200,600,900,50} },
 { key{Rectangle{350,550,30,10}} },
-{ door{Rectangle{800,450,25,150} }},
+{ door{Rectangle{800,450,20,150} }},
 { Rectangle{700,350,50,250} },
 { m1 },
 { {Rectangle{900,500,25,100} , Rectangle{2550,1100,25,100}} },
@@ -144,9 +144,7 @@ void updateEnvironment(level &curLevel){
         if(zippy.overlapCheck(message.getShape()) && IsKeyPressed(KEY_SPACE)){ 
             currentMessage = message;
             drawState = true;
-        } else {
-            currentMessage = defaultMessage;
-            drawState = false;
+            break;
         }
         message.drawTexture();
     }
