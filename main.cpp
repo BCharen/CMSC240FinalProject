@@ -6,6 +6,8 @@
 #include "level.cpp"
 using namespace std;
 
+#define TEST true
+
 #define KILLZONE 1400
 
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
@@ -21,6 +23,14 @@ Texture2D labDoor;
 
 //messages
 int curText = -1;
+bool drawState = false;
+Message defaultMessage{0, 0, "Default"};
+Message& currentMessage = defaultMessage;
+
+Message winMessage{0, 0, "You found pibble! Win or something"};
+Message loseMessage{0, 0, "You fell off the map :("};
+Message m1{600,550, "I need to find pibble, but how?"};
+Message m2{3450,750, "There he is! how do I unlock this door?"};
 /*
 Each line is a different type of object. In order they are:
 walls: Rectangle for position.
@@ -30,15 +40,27 @@ ladders: Rectangle for position.
 messages: Rectangle for position. Must put a string message in the switch case at the end to be displayed.
 zips: Rectangle for start location, Rectangle for end location.
 */
+
+
+level testLevel = {
+{ Rectangle{200,600,900,50} },
+{ key{Rectangle{350,550,30,10}} },
+{ door{Rectangle{800,450,25,150} }},
+{ Rectangle{700,350,50,250} },
+{ m1 },
+{ {Rectangle{900,500,25,100} , Rectangle{2550,1100,25,100}} },
+};
+
 level level1 = {
 { Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} },  
 { key{Rectangle{50,550,30,10}} , key{Rectangle{0,550,30,10}}},
-{ door{Rectangle{300,450,25,150}} , door{Rectangle{3500,650,25,150}}},
+{ door{Rectangle{300,450,20,150}} , door{Rectangle{3500,650,20,150}}},
 { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
-{ Rectangle{600,550,25,25} , {3450,750,25,25}},
+{ m1, m2 },
 { {Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , {Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}}
 };
 
+level& currentLevel = level1;
 
 
 void restartLevel(level &lvl){
@@ -62,16 +84,26 @@ void updateEnvironment(level &curLevel){
     //Draw Pib texture
     Rectangle source = (Rectangle){0, 0, 767, 603};
     Rectangle dest = (Rectangle){3600, 740, 50, 50};
+    if (TEST){
+        dest.x = 300;
+        dest.y = 540;
+    }
     DrawTexturePro(pib, source, dest, (Vector2){25, 25}, 45 * GetTime(),  WHITE);
 
     //temporary implementation of win state
     if (zippy.overlapCheck(dest)){
         zippy.changeWinState(true);
+        currentMessage = winMessage;
+        drawState = true;
+        return;
     }
 
     //temporary implementation of dead state
     if (zippy.position.y > KILLZONE){
         zippy.changeDeadState(true);
+        currentMessage = loseMessage;
+        drawState = true;
+        return;
     }
 
     for (auto &ladder : curLevel.ladders){
@@ -94,11 +126,12 @@ void updateEnvironment(level &curLevel){
     }
 
     for (auto &door : curLevel.doors){
-        if(door.correspondingKey != nullptr && door.correspondingKey->show == false && zippy.overlapCheck(door.shape)){
+        if(door.correspondingKey != nullptr && door.correspondingKey->show == false){
             if (zippy.overlapCheck(door.shape)){
                 DrawTexturePro(labDoor, labDoorDimensions, Rectangle{door.shape.x, door.shape.y, 75, 150}, (Vector2){0, 0}, 0,  WHITE);
             } else {
-
+                DrawRectangleRec(door.shape, GRAY);
+                zippy.collisionCheck(door.shape);
             }
         }
         else{
@@ -107,9 +140,15 @@ void updateEnvironment(level &curLevel){
         }
     }
 
-    for (int i = 0; i < (int)curLevel.messages.size(); i++){
-        if(zippy.overlapCheck(curLevel.messages[i])){ if(IsKeyPressed(KEY_SPACE)){curText = i;}}
-        DrawRectangleRec(curLevel.messages[i],{255,255,255,255});
+    for (auto &message : curLevel.messages){
+        if(zippy.overlapCheck(message.getShape()) && IsKeyPressed(KEY_SPACE)){ 
+            currentMessage = message;
+            drawState = true;
+        } else {
+            currentMessage = defaultMessage;
+            drawState = false;
+        }
+        message.drawTexture();
     }
 
     for (auto &zip : curLevel.zips){
@@ -128,6 +167,10 @@ void updateCam(Camera2D *camera, player *play){
 }
 int main () {
 
+    if(TEST){
+        currentLevel = testLevel; 
+    }
+
     cam.target = (Vector2){zippy.position.x,zippy.position.y};
     cam.offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
     cam.rotation = 0;
@@ -144,68 +187,39 @@ int main () {
 
     //connect doors and keys
 
+    testLevel.doors[0].correspondingKey = &testLevel.keys[0];
+
     level1.doors[0].correspondingKey = &level1.keys[0];
     level1.doors[1].correspondingKey = &level1.keys[1];
 
 
     SetTargetFPS(60);
     while (WindowShouldClose() == false){
-
-        //temporary implementation of win state
-        if(zippy.checkWin()){
-            //win message
-            curText = -3;
-        }
-
-        //temporary implementation of dead state
-        if(zippy.isDead()){
-            //dead message
-            curText = -2;
-            if (IsKeyPressed(KEY_SPACE)){
-                restartLevel(level1);
-                zippy.changeDeadState(false);
-                zippy.position.x = 500;
-                zippy.position.y = 500;
-            }
-        }
-        
-        
-
         updateCam(&cam, &zippy);
         BeginDrawing();
-            ClearBackground(BLACK);
-            if(curText == -1){
-            BeginMode2D(cam);
-            updateEnvironment(level1);
-            zippy.Draw();
-            zippy.lrInputCheck();
-            zippy.Update();
-            EndMode2D();
-            } else{
-                //add cases for each message corresponding to index number. Just copy my text and replace the text and case number.
-                
-                switch (curText) {
-                    case -3:
-                        DrawText("You found pibble! Win or something",screenWidth/2 - 350,screenHeight/2,50,{255,255,255,255});
-                        break;
-                    case -2:
-                        DrawText("You fell off the map :(",screenWidth/2 - 290,screenHeight/2,50,{255,255,255,255});
-                        break;
-                    case 0:
-                        DrawText("I need to find pibble, but how?",screenWidth/2 - 330,screenHeight/2,50,{255,255,255,255});
-                        break;    
-                    case 1:
-                        DrawText("There he is! how do I unlock this door?",screenWidth/2 - 410,screenHeight/2,50,{255,255,255,255});
-                        break; 
-                    
+        ClearBackground(BLACK);
+            if(drawState){
+                currentMessage.drawTextScreen();
+                if (IsKeyPressed(KEY_SPACE)){
+                    currentMessage = defaultMessage;
+                    drawState = false;
+                    if (zippy.isDead() || zippy.checkWin()){
+                        restartLevel(currentLevel);
+                        zippy.changeDeadState(false);
+                        zippy.position.x = 500;
+                        zippy.position.y = 500;
+                    }
                 }
-                if (IsKeyPressed(KEY_SPACE)){curText = -1;};
-             
+            }else{
+                BeginMode2D(cam);
+                updateEnvironment(level1);
+                zippy.Draw();
+                zippy.lrInputCheck();
+                zippy.Update();
+                EndMode2D();
             }
-
         EndDrawing();
     }    
-
     CloseWindow();
 }
 
