@@ -39,8 +39,9 @@ doors: same as keys. Must have an equal number of keys and doors (they check the
 ladders: Rectangle for position.
 messages: Rectangle for position. Must put a string message in the switch case at the end to be displayed.
 zips: Rectangle for start location, Rectangle for end location.
+spawn: spawnpoint
+objectiveCoordinates: Coordinate of objective
 */
-
 
 level testLevel = {
 { Rectangle{200,600,900,50} },
@@ -49,6 +50,8 @@ level testLevel = {
 { Rectangle{700,350,50,250} },
 { m1 },
 { {Rectangle{900,500,25,100} , Rectangle{2550,1100,25,100}} },
+{500, 500},
+(Rectangle){300, 540, 50, 50}
 };
 
 level level1 = {
@@ -57,7 +60,9 @@ level level1 = {
 { door{Rectangle{300,450,20,150}} , door{Rectangle{3500,650,20,150}}},
 { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
 { m1, m2 },
-{ {Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , {Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}}
+{ {Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , {Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}},
+{500, 500},
+(Rectangle){3600, 740, 50, 50}
 };
 
 level& currentLevel = level1;
@@ -83,15 +88,10 @@ void updateEnvironment(level &curLevel){
 
     //Draw Pib texture
     Rectangle source = (Rectangle){0, 0, 767, 603};
-    Rectangle dest = (Rectangle){3600, 740, 50, 50};
-    if (TEST){
-        dest.x = 300;
-        dest.y = 540;
-    }
-    DrawTexturePro(pib, source, dest, (Vector2){25, 25}, 45 * GetTime(),  WHITE);
+    DrawTexturePro(pib, source, curLevel.objectiveCoordinates, (Vector2){25, 25}, 45 * GetTime(),  WHITE);
 
     //temporary implementation of win state
-    if (zippy.overlapCheck(dest)){
+    if (zippy.overlapCheck(curLevel.objectiveCoordinates)){
         zippy.changeWinState(true);
         currentMessage = winMessage;
         drawState = true;
@@ -171,6 +171,8 @@ int main () {
         currentLevel = testLevel; 
     }
 
+    zippy.spawn(currentLevel);
+
     cam.target = (Vector2){zippy.position.x,zippy.position.y};
     cam.offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
     cam.rotation = 0;
@@ -206,8 +208,8 @@ int main () {
                     if (zippy.isDead() || zippy.checkWin()){
                         restartLevel(currentLevel);
                         zippy.changeDeadState(false);
-                        zippy.position.x = 500;
-                        zippy.position.y = 500;
+                        zippy.changeWinState(false);
+                        zippy.spawn(currentLevel);
                     }
                 }
             }else{

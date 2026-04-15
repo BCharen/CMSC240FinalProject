@@ -82,3 +82,8 @@ bool player::isDead(){
 void player::changeDeadState(bool isDead){
     dead = isDead;
 }
+
+void player::spawn(level lvl){
+    position.x = lvl.spawnpoint.x;
+    position.y = lvl.spawnpoint.y;
+}

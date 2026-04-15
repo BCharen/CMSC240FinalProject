@@ -70,6 +70,8 @@ struct level {
     vector<Rectangle> ladders;
     vector<Message> messages;
     vector<zipline> zips; 
+    Vector2 spawnpoint;
+    Rectangle objectiveCoordinates;
 };
 
 

@@ -3,6 +3,8 @@
 
 #include <raylib.h>
 #include <iostream>
+#include "level.cpp"
+
 using namespace std;
 enum Directions{
     NONE = -1,
@@ -64,5 +66,7 @@ class player{
             }
         }
         void lrInputCheck();
+
+        void spawn(level lvl);
 };
 #endif
