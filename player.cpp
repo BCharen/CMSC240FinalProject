@@ -5,7 +5,7 @@ void player::collisionCheck(Rectangle otherRect){
         return;
     }
 
-    if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=10) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
+    if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=6) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
         velocity.y = 0;
     }
@@ -14,11 +14,11 @@ void player::collisionCheck(Rectangle otherRect){
         velocity.y = 0;
     }
 
-    if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=10) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
+    if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = LEFT;
         velocity.x = 0;
     }
-    else if(otherRect.x <= position.x+position.width && (position.x+position.width-otherRect.x<=10) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
+    else if(otherRect.x <= position.x+position.width && (position.x+position.width-otherRect.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = RIGHT;
         velocity.x = 0;
     }
@@ -41,16 +41,44 @@ void player::setOnLadder(bool val){
     onLadder = val;
 }
 void player::lrInputCheck(){
+    if (VertColDir != NONE || HorColDir != NONE){
+        wallJumped = false;
+    }
+    
+    if (wallJumped){
+        if (velocity.x > 0){
+            if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
+                velocity.x = 1;
+            }
+
+            else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
+                velocity.x = 5;
+            }
+        }
+
+        if (velocity.x < 0){
+            if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
+                velocity.x = -5;
+            }
+
+            else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
+                velocity.x = -1;
+            }
+        }
+        
+        return;
+    }
+    
     if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
         velocity.x = -5;
     }
 
     else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
         velocity.x = 5;
-    }
-
-    else {
-        velocity.x =  0;
+    } 
+    
+    else{
+        velocity.x = 0;
     }
 
     if(onLadder){
@@ -60,6 +88,13 @@ void player::lrInputCheck(){
         ((IsKeyDown(KEY_S)||IsKeyDown(KEY_DOWN)) && VertColDir != DOWN){velocity.y = 5;} 
         else {velocity.y = 0;}
     } else if (IsKeyDown(KEY_SPACE) && VertColDir == DOWN){
+        if (HorColDir == LEFT){
+            velocity.x = 3;
+            wallJumped = true;
+        } else if (HorColDir == RIGHT){
+            velocity.x = -3;
+            wallJumped = true;
+        }
         velocity.y = -5;
     }
 }

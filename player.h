@@ -34,7 +34,7 @@ class player{
         bool isDead();
         void changeDeadState(bool isDead);
         
-
+        bool wallJumped = false;
         void collisionCheck(Rectangle otherRect);
         bool keyCheck(Rectangle otherRect);
         bool overlapCheck(Rectangle otherRect);
@@ -46,7 +46,7 @@ class player{
         void startZip(Vector2 start, Vector2 end);
         void Update(){
             if(!onZip){
-                if(!onLadder){
+                if(!onLadder || wallJumped){
                     //gravity setting
                     velocity.y += acceleration * GetFrameTime() * 3.5;
                 }
