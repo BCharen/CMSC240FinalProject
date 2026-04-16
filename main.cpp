@@ -3,12 +3,12 @@
 #include <string.h>
 #include "player.h"
 #include <array>
-#include "level.cpp"
+#include "level.h"
 using namespace std;
 
-#define TEST false
-
+#define TEST true
 #define KILLZONE 1400
+#define FPS 60
 
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
 
@@ -22,7 +22,6 @@ Texture2D pib;
 Texture2D labDoor;
 
 //messages
-int curText = -1;
 bool drawState = false;
 Message defaultMessage{0, 0, "Default"};
 Message& currentMessage = defaultMessage;
@@ -107,6 +106,7 @@ void updateEnvironment(level &curLevel){
     }
 
     for (auto &ladder : curLevel.ladders){
+        zippy.setOnLadder(false);
         if(!zippy.getOnLadder()){
             zippy.setOnLadder(zippy.overlapCheck(ladder));
         }
@@ -193,7 +193,7 @@ int main () {
     level1.doors[1].correspondingKey = &level1.keys[1];
 
 
-    SetTargetFPS(60);
+    SetTargetFPS(FPS);
     while (WindowShouldClose() == false){
         updateCam(&cam, &zippy);
         BeginDrawing();
@@ -210,7 +210,7 @@ int main () {
                         zippy.spawn(currentLevel);
                     }
                 }
-            }else{
+            } else {
                 BeginMode2D(cam);
                 updateEnvironment(level1);
                 zippy.Draw();

@@ -3,7 +3,7 @@
 
 #include <raylib.h>
 #include <iostream>
-#include "level.cpp"
+#include "level.h"
 
 using namespace std;
 enum Directions{
@@ -15,8 +15,9 @@ enum Directions{
 };
 class player{
     private:
-        Vector2 velocity = {0,5};
+        Vector2 velocity = {0,0};
         Vector2 zipVelocity;
+        int acceleration = 5;
         int VertColDir = NONE;
         int HorColDir = NONE;
         bool onLadder = false;
@@ -45,17 +46,23 @@ class player{
         void startZip(Vector2 start, Vector2 end);
         void Update(){
             if(!onZip){
+                if(!onLadder){
+                    //gravity setting
+                    velocity.y += acceleration * GetFrameTime() * 3.5;
+                }
 
-            if(!((VertColDir == UP && velocity.y < 0)||(VertColDir == DOWN && velocity.y > 0))){
-            position.y+=velocity.y;
-            }
-            if(!((HorColDir == LEFT && velocity.x < 0)||(HorColDir == RIGHT && velocity.x > 0))){
-            position.x+=velocity.x;
-            }
+                if(!((VertColDir == UP && velocity.y < 0)||(VertColDir == DOWN && velocity.y > 0))){
+                    position.y+=velocity.y;
+                } else {
+                    velocity.y = 0;
+                }
 
-            VertColDir = NONE;
-            HorColDir = NONE;
-            onLadder = false;
+                if(!((HorColDir == LEFT && velocity.x < 0)||(HorColDir == RIGHT && velocity.x > 0))){
+                    position.x+=velocity.x;
+                }
+
+                VertColDir = NONE;
+                HorColDir = NONE;
             }
             else {
                 position.y+=zipVelocity.y;
