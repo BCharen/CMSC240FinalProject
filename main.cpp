@@ -6,7 +6,7 @@
 #include "level.h"
 using namespace std;
 
-#define TEST true
+#define TEST false
 #define KILLZONE 1400
 #define FPS 60
 
@@ -105,8 +105,8 @@ void updateEnvironment(level &curLevel){
         return;
     }
 
+    zippy.setOnLadder(false);
     for (auto &ladder : curLevel.ladders){
-        zippy.setOnLadder(false);
         if(!zippy.getOnLadder()){
             zippy.setOnLadder(zippy.overlapCheck(ladder));
         }
@@ -161,7 +161,7 @@ void updateEnvironment(level &curLevel){
 } 
 void updateCam(Camera2D *camera, player *play){
     camera->offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
-    camera->target = (Vector2){zippy.position.x,zippy.position.y};
+    camera->target = (Vector2){ zippy.position.x,zippy.position.y };
 }
 int main () {
 
