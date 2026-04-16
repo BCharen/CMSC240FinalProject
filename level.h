@@ -6,6 +6,7 @@
 #include <vector>
 using namespace std;
 
+struct level;
 
 struct hideableObject {
     Rectangle shape;
@@ -24,9 +25,18 @@ struct door : hideableObject{
     using hideableObject::hideableObject;
 };
 
-struct zipline{
+class Zipline{
+    public:
     Rectangle pole1;
     Rectangle pole2;
+
+    Zipline();
+
+    Zipline(Rectangle p1, Rectangle p2);
+
+    Vector2 getZipStart();
+
+    Vector2 getZipEnd();
 };
 
 class Message{
@@ -49,15 +59,38 @@ class Message{
     Color getColor();
 };
 
+class LevelObjective : public Zipline{
+    private:
+    Rectangle shape;
+    bool isPib;
+    level* connectedLevel;
+
+    public:
+
+    LevelObjective(Rectangle rec, level* toLevel);
+
+    LevelObjective(Rectangle rec1, Rectangle rec2, level* toLevel);
+
+    level* getConnectedLevel();
+
+    bool isThisPib();
+
+    Rectangle getPibShape();
+
+    Rectangle getPoleOne();
+
+    Rectangle getPoleTwo();
+};
+
 struct level {
     vector<Rectangle> walls;
     vector<key> keys;
     vector<door> doors;
     vector<Rectangle> ladders;
     vector<Message> messages;
-    vector<zipline> zips; 
+    vector<Zipline> zips; 
     Vector2 spawnpoint;
-    Rectangle objectiveCoordinates;
+    LevelObjective objective;
 };
 
 #endif

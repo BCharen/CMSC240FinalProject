@@ -28,7 +28,8 @@ Message& currentMessage = defaultMessage;
 
 Message winMessage{0, 0, "You found pibble! Win or something"};
 Message loseMessage{0, 0, "You fell off the map :("};
-Message m1{600,550, "I need to find pibble, but how?"};
+Message loadingScreen{0, 0, "Loading..."};
+Message m1{150,550, "I need to find pibble, but how?"};
 Message m2{3450,750, "There he is! how do I unlock this door?"};
 /*
 Each line is a different type of object. In order they are:
@@ -42,59 +43,93 @@ spawn: spawnpoint
 objectiveCoordinates: Coordinate of objective
 */
 
+level win = {
+{Rectangle{200,600,900,50}},
+{},
+{},
+{},
+{},
+{},
+{300,500},
+{{900, 540, 50, 50}, nullptr}
+};
+
 level testLevel = {
 { Rectangle{200,600,900,50} },
 { key{Rectangle{350,550,30,10}} },
 { door{Rectangle{800,450,20,150} }},
 { Rectangle{700,350,50,250} },
 { m1 },
-{ {Rectangle{900,500,25,100} , Rectangle{2550,1100,25,100}} },
+{ },
 {500, 500},
-(Rectangle){300, 540, 50, 50}
+{{900,500,25,100} , {2550,1100,25,100}, &win}
 };
 
-level level1 = {
+level level2 = {
 { Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} },  
 { key{Rectangle{50,550,30,10}} , key{Rectangle{0,550,30,10}}},
 { door{Rectangle{300,450,20,150}} , door{Rectangle{3500,650,20,150}}},
 { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
-{ m1, m2 },
-{ {Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , {Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}},
+{ m2 },
+{ Zipline{Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , Zipline{Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}},
 {500, 500},
-(Rectangle){3600, 740, 50, 50}
+{{3600,700,25,100} , {5000,900,25,100}, &win}
 };
 
-level& currentLevel = level1;
+level level1 = {
+{ Rectangle{-800,600,1100,1000}, {1500,800,500,1000} },
+{  },
+{  },
+{  },
+{ m1 },
+{ Zipline{Rectangle{250,500,25,100},Rectangle{1550,700,25,100}} },
+{50,500},
+{{1900, 700, 25, 100}, {3000, 900, 25, 100}, &level2}
+};
 
 
-void restartLevel(level &lvl){
-    for (auto &key : lvl.keys){
+//These are pointers, be careful when referencing them to level objects
+level* currentLevel;
+level* startingLevel;
+
+
+void restartLevel(level* lvl){
+    for (auto &key : (*lvl).keys){
         key.show = true;
     }
-}
-
-Vector2 getZipStart(zipline zip){
-    Rectangle pole = zip.pole1;
-    return (Vector2){pole.x+(pole.width/2),pole.y};
-}
-
-Vector2 getZipEnd(zipline zip){
-    Rectangle pole = zip.pole2;
-    return (Vector2){pole.x+(pole.width/2),pole.y};
 }
 
 void updateEnvironment(level &curLevel){
 
     //Draw Pib texture
     Rectangle source = (Rectangle){0, 0, 767, 603};
-    DrawTexturePro(pib, source, curLevel.objectiveCoordinates, (Vector2){25, 25}, 45 * GetTime(),  WHITE);
 
     //temporary implementation of win state
-    if (zippy.overlapCheck(curLevel.objectiveCoordinates)){
-        zippy.changeWinState(true);
-        currentMessage = winMessage;
-        drawState = true;
-        return;
+    if(curLevel.objective.isThisPib()){
+        DrawTexturePro(pib, source, curLevel.objective.getPibShape(), (Vector2){25, 25}, 45 * GetTime(),  WHITE);
+        if (zippy.overlapCheck(curLevel.objective.getPibShape())){
+            zippy.changeWinState(true);
+            currentMessage = winMessage;
+            drawState = true;
+            return;
+        }
+    } else {
+        DrawRectangleRec(curLevel.objective.getPoleOne(),PINK);
+        DrawRectangleRec(curLevel.objective.getPoleTwo(),PINK);
+        DrawLineEx(curLevel.objective.getZipStart(),curLevel.objective.getZipEnd(),10,PINK);
+
+        if(zippy.overlapCheck(curLevel.objective.getPoleOne())){ 
+            if(IsKeyPressed(KEY_SPACE)){
+                zippy.startZip(curLevel.objective.getZipStart(),curLevel.objective.getZipEnd());
+            }
+        }
+
+        if(zippy.overlapCheck(curLevel.objective.getPoleTwo())){
+            currentMessage = loadingScreen;
+            currentLevel = curLevel.objective.getConnectedLevel();
+            drawState = true;
+            zippy.spawn(currentLevel);
+        }
     }
 
     //temporary implementation of dead state
@@ -151,10 +186,18 @@ void updateEnvironment(level &curLevel){
 
     for (auto &zip : curLevel.zips){
         DrawRectangleRec(zip.pole1,DARKGREEN);
-        if(zippy.overlapCheck(zip.pole1)){ if(IsKeyPressed(KEY_SPACE)){zippy.startZip(getZipStart(zip),getZipEnd(zip));}}
+        if(zippy.overlapCheck(zip.pole1)){ 
+            if(IsKeyPressed(KEY_SPACE)){
+                zippy.startZip(zip.getZipStart(),zip.getZipEnd());
+            }
+        }
         DrawRectangleRec(zip.pole2,DARKGREEN);
-        if(zippy.overlapCheck(zip.pole2)){ if(IsKeyPressed(KEY_SPACE)){zippy.startZip(getZipEnd(zip),getZipStart(zip));}}
-        DrawLineEx(getZipStart(zip),getZipEnd(zip),10,DARKGREEN);
+        if(zippy.overlapCheck(zip.pole2)){ 
+            if(IsKeyPressed(KEY_SPACE)){
+                zippy.startZip(zip.getZipEnd(),zip.getZipStart());
+            }
+        }
+        DrawLineEx(zip.getZipStart(),zip.getZipEnd(),10,DARKGREEN);
     }
 
         
@@ -166,8 +209,12 @@ void updateCam(Camera2D *camera, player *play){
 int main () {
 
     if(TEST){
-        currentLevel = testLevel; 
+        startingLevel = &testLevel; 
+    } else {
+        startingLevel = &level1;
     }
+
+    currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);
 
@@ -189,8 +236,8 @@ int main () {
 
     testLevel.doors[0].correspondingKey = &testLevel.keys[0];
 
-    level1.doors[0].correspondingKey = &level1.keys[0];
-    level1.doors[1].correspondingKey = &level1.keys[1];
+    level2.doors[0].correspondingKey = &level2.keys[0];
+    level2.doors[1].correspondingKey = &level2.keys[1];
 
 
     SetTargetFPS(FPS);
@@ -212,7 +259,7 @@ int main () {
                 }
             } else {
                 BeginMode2D(cam);
-                updateEnvironment(level1);
+                updateEnvironment(*currentLevel);
                 zippy.Draw();
                 zippy.lrInputCheck();
                 zippy.Update();

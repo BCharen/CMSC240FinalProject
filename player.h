@@ -74,6 +74,6 @@ class player{
         }
         void lrInputCheck();
 
-        void spawn(level lvl);
+        void spawn(level* lvl);
 };
 #endif
