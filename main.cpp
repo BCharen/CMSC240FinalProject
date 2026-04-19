@@ -11,6 +11,7 @@ using namespace std;
 #define FPS 60
 
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
+Rectangle obstacleTextureDimensions{0,0,1220,780};
 
 int screenWidth = 1500;
 int screenHeight = 1500;
@@ -20,6 +21,7 @@ Camera2D cam = { 0 };
 
 Texture2D pib;
 Texture2D labDoor;
+Texture2D obstacleTexture;
 
 //messages
 bool drawState = false;
@@ -28,6 +30,7 @@ Message& currentMessage = defaultMessage;
 
 Message winMessage{0, 0, "You found pibble! Win or something"};
 Message loseMessage{0, 0, "You fell off the map :("};
+Message touchObstacleMessage{0, 0, "You touched the danger :("};
 Message loadingScreen{0, 0, "Loading..."};
 Message m1{150,550, "I need to find pibble, but how?"};
 Message m2{3450,750, "How do I unlock this door?"};
@@ -39,12 +42,14 @@ doors: same as keys. Must have an equal number of keys and doors (they check the
 ladders: Rectangle for position.
 messages: Rectangle for position. Must put a string message in the switch case at the end to be displayed.
 zips: Rectangle for start location, Rectangle for end location.
+Obstacle: Width, height, speed, starting position and ending position (make sure starting position height >= ending position height)
 spawn: spawnpoint
 objectiveCoordinates: Coordinate of objective
 */
 
 level win = {
 {Rectangle{200,600,900,50}},
+{},
 {},
 {},
 {},
@@ -61,6 +66,7 @@ level testLevel = {
 { Rectangle{700,350,50,250} },
 { m1 },
 { },
+{Obstacle{200,50,50,{300,0},{200,500}}},
 {500, 500},
 {{900,500,25,100} , {2550,1100,25,100}, &win}
 };
@@ -72,6 +78,7 @@ level level2 = {
 { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
 { m2 },
 { Zipline{Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , Zipline{Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}},
+{},
 {500, 500},
 {{3600,700,25,100} , {5000,900,25,100}, &win}
 };
@@ -83,6 +90,7 @@ level level1 = {
 {  },
 { m1 },
 { Zipline{Rectangle{250,500,25,100},Rectangle{1550,700,25,100}} },
+{},
 {50,500},
 {{1900, 700, 25, 100}, {3000, 900, 25, 100}, &level2}
 };
@@ -99,7 +107,7 @@ level* startingLevel;
 
 void restartLevel(level* lvl){
     for (auto &key : (*lvl).keys){
-        key.show = true;
+        key.setShow(true);
     }
 }
 
@@ -166,7 +174,7 @@ void updateEnvironment(level &curLevel){
     for (auto &key : curLevel.keys){
         if(key.show == true){
         DrawRectangleRec(key.shape,{242,132,17,255});
-        key.show = zippy.keyCheck(key.shape);
+        key.setShow(zippy.keyCheck(key.shape));
         }
     }
 
@@ -210,6 +218,24 @@ void updateEnvironment(level &curLevel){
         DrawLineEx(zip.getZipStart(),zip.getZipEnd(),10,DARKGREEN);
     }
 
+    for (auto &obstacle : curLevel.obstacles){
+        obstacle.obstacleUpdate();
+        if(obstacle.show == true){
+            if(obstacle.isDangerous()){
+                DrawTexturePro(obstacleTexture, obstacleTextureDimensions, obstacle.shape, (Vector2){0, 0}, 0,  WHITE);
+                if(zippy.overlapCheck(obstacle.shape)){
+                    zippy.changeDeadState(true);
+                    currentMessage = touchObstacleMessage;
+                    drawState = true;
+                    return;
+                }
+            } else {
+                DrawRectangleRec(obstacle.shape,{42,2,57,255});
+                zippy.collisionCheck(obstacle.shape);
+            }
+        }
+    }
+
         
 } 
 void updateCam(Camera2D *camera, player *play){
@@ -241,6 +267,7 @@ int main () {
 
     pib = LoadTexture("textures/pibble.png"); 
     labDoor = LoadTexture("textures/door.png"); 
+    obstacleTexture = LoadTexture("textures/danger.png"); 
 
 
     //connect doors and keys

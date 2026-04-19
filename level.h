@@ -12,7 +12,9 @@ struct hideableObject {
     Rectangle shape;
     bool show = true;
 
-    hideableObject(Rectangle r) : shape(r) {}
+    hideableObject() : shape({0,0,0,0}) {};
+    hideableObject(Rectangle r) : shape(r) {};
+    void setShow(bool s){show = s;};
 };
 
 struct key : hideableObject{
@@ -23,6 +25,21 @@ struct door : hideableObject{
     key* correspondingKey = nullptr;
 
     using hideableObject::hideableObject;
+};
+
+class Obstacle : public hideableObject{
+    private:
+    Vector2 speed;
+    Vector2 startPoint;
+    Vector2 endPoint; 
+    bool dangerous = true;
+
+    public:
+    Obstacle(float width, float height, int s, Vector2 sP, Vector2 eP);
+    Obstacle(float width, float height, int s, Vector2 sP, Vector2 eP, bool danger);
+
+    void obstacleUpdate();
+    bool isDangerous();
 };
 
 class Zipline{
@@ -89,6 +106,7 @@ struct level {
     vector<Rectangle> ladders;
     vector<Message> messages;
     vector<Zipline> zips; 
+    vector<Obstacle> obstacles;
     Vector2 spawnpoint;
     LevelObjective objective;
 };

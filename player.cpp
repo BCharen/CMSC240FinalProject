@@ -5,22 +5,28 @@ void player::collisionCheck(Rectangle otherRect){
         return;
     }
 
+    //Need to rework collision check and repositioning, flawed for standing on moving non-dangerous obstacles
+
     if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=6) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
         velocity.y = 0;
+        //position.y = otherRect.y + otherRect.height;
     }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
         VertColDir = DOWN;
         velocity.y = 0;
+        //position.y = otherRect.y - position.height;
     }
 
     if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = LEFT;
         velocity.x = 0;
+        //position.x = otherRect.x + otherRect.width;
     }
     else if(otherRect.x <= position.x+position.width && (position.x+position.width-otherRect.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = RIGHT;
         velocity.x = 0;
+        //position.x = otherRect.x - position.width;
     }
 
 }

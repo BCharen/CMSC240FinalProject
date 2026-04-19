@@ -1,5 +1,49 @@
 #include "level.h"
 
+    Obstacle::Obstacle(float width, float height, int s, Vector2 sP, Vector2 eP){
+        startPoint = sP;
+        endPoint = eP;
+        shape = {startPoint.x, startPoint.y, width, height};
+        Vector2 dir = Vector2Normalize({eP.x - sP.x, eP.y - sP.y});
+        speed = {dir.x * s / 10, dir.y * s / 10};
+    };
+
+    Obstacle::Obstacle(float width, float height, int s, Vector2 sP, Vector2 eP, bool danger){
+        shape = {startPoint.x, startPoint.y, width, height};
+        startPoint = sP;
+        endPoint = eP;
+        Vector2 distance = {eP.x - sP.x, eP.y - sP.y};
+        if (Vector2Length(distance) == 0) {
+            speed = {0, 0};
+        } else {
+            Vector2 dir = Vector2Normalize(distance);
+            speed = {dir.x * s / 10, dir.y * s / 10};
+        }
+        dangerous = danger;
+    };
+
+    void Obstacle::obstacleUpdate() {
+        shape.x += speed.x;
+        shape.y += speed.y;
+
+        if (shape.y < startPoint.y) {
+            shape.x = startPoint.x;
+            shape.y = startPoint.y;
+            speed.x = -speed.x;
+            speed.y = -speed.y;
+        }
+        else if (shape.y > endPoint.y) {
+            shape.x = endPoint.x;
+            shape.y = endPoint.y;
+            speed.x = -speed.x;
+            speed.y = -speed.y;
+        }
+    };
+
+    bool Obstacle::isDangerous(){
+        return dangerous;
+    }
+
     Zipline::Zipline(){
         pole1 = {0,0,0,0};
         pole2 = {0,0,0,0};
