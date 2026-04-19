@@ -6,7 +6,7 @@
 #include "level.h"
 using namespace std;
 
-#define TEST false
+#define TEST true
 #define KILLZONE 1400
 #define FPS 60
 
@@ -30,7 +30,7 @@ Message winMessage{0, 0, "You found pibble! Win or something"};
 Message loseMessage{0, 0, "You fell off the map :("};
 Message loadingScreen{0, 0, "Loading..."};
 Message m1{150,550, "I need to find pibble, but how?"};
-Message m2{3450,750, "There he is! how do I unlock this door?"};
+Message m2{3450,750, "How do I unlock this door?"};
 /*
 Each line is a different type of object. In order they are:
 walls: Rectangle for position.
@@ -66,7 +66,7 @@ level testLevel = {
 };
 
 level level2 = {
-{ Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} },  
+{ Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} , Rectangle{3500,600,400,50} },  
 { key{Rectangle{50,550,30,10}} , key{Rectangle{0,550,30,10}}},
 { door{Rectangle{300,450,20,150}} , door{Rectangle{3500,650,20,150}}},
 { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
@@ -87,8 +87,12 @@ level level1 = {
 {{1900, 700, 25, 100}, {3000, 900, 25, 100}, &level2}
 };
 
+vector<level*> levelSet1 = {&level1,&level2,&win};
+vector<level*> levelSetTest = {&testLevel,&win};
+
 
 //These are pointers, be careful when referencing them to level objects
+vector<level*>* currentLevelSet;
 level* currentLevel;
 level* startingLevel;
 
@@ -96,6 +100,12 @@ level* startingLevel;
 void restartLevel(level* lvl){
     for (auto &key : (*lvl).keys){
         key.show = true;
+    }
+}
+
+void restartGame(vector<level*>* lvls){
+    for (auto &level : *lvls){
+        restartLevel(level);
     }
 }
 
@@ -209,11 +219,12 @@ void updateCam(Camera2D *camera, player *play){
 int main () {
 
     if(TEST){
-        startingLevel = &testLevel; 
+        currentLevelSet = &levelSetTest; 
     } else {
-        startingLevel = &level1;
+        currentLevelSet = &levelSet1; 
     }
 
+    startingLevel = (*currentLevelSet)[0];
     currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);
@@ -250,11 +261,18 @@ int main () {
                 if (IsKeyPressed(KEY_SPACE)){
                     currentMessage = defaultMessage;
                     drawState = false;
-                    if (zippy.isDead() || zippy.checkWin()){
+                    if (zippy.isDead()){
                         restartLevel(currentLevel);
                         zippy.changeDeadState(false);
                         zippy.changeWinState(false);
                         zippy.spawn(currentLevel);
+                    }
+                    if (zippy.checkWin()){
+                        restartGame(currentLevelSet);
+                        zippy.changeDeadState(false);
+                        zippy.changeWinState(false);
+                        currentLevel = startingLevel;
+                        zippy.spawn(startingLevel);
                     }
                 }
             } else {
