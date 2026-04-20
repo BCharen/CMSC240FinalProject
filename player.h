@@ -69,7 +69,7 @@ class player{
                 //zipline max speed and acceleration rate, tune as nescessary to make it feel good
 
                 if (Vector2Length(zipVelocity) < 180){
-                    zipVelocity += Vector2Normalize(Vector2Subtract({zipTarget.x, zipTarget.y}, {position.x, position.y})) * 18 * GetFrameTime();
+                    zipVelocity += Vector2Normalize(Vector2Subtract({zipTarget.x, zipTarget.y}, {position.x, position.y})) * acceleration * 4 * GetFrameTime();
                 }
                 position.x+=zipVelocity.x;
                 position.y+=zipVelocity.y;
