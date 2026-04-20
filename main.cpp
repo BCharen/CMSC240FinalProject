@@ -113,6 +113,7 @@ level* startingLevel;
 void restartLevel(level* lvl){
     for (auto &key : (*lvl).keys){
         key.setShow(true);
+        zippy.keysInInventory.clear();
     }
 }
 
