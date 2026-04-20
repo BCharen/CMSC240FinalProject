@@ -6,7 +6,7 @@
 #include "level.h"
 using namespace std;
 
-#define TEST true
+#define TEST false
 #define KILLZONE 1400
 #define FPS 60
 
@@ -273,13 +273,8 @@ void updateEnvironment(level &curLevel){
 
     for (auto &zip : curLevel.zips){
         DrawRectangleRec(zip.pole1,DARKGREEN);
-        if(zippy.overlapCheck(zip.pole1)){ 
-            if(IsKeyPressed(KEY_SPACE)){
-                zippy.startZip(zip.pole1,zip.pole2);
-            }
-        }
         DrawRectangleRec(zip.pole2,DARKGREEN);
-        if(zippy.overlapCheck(zip.pole2)){ 
+        if(zippy.overlapCheck(zip.pole1)){ 
             if(IsKeyPressed(KEY_SPACE)){
                 zippy.startZip(zip.pole1,zip.pole2);
             }
