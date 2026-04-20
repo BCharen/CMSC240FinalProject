@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include <vector>
+#include <string>
 using namespace std;
 
 struct level;
@@ -18,6 +19,7 @@ struct hideableObject {
 };
 
 struct key : hideableObject{
+    string name = "key";
     using hideableObject::hideableObject;
 };
 

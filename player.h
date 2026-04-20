@@ -33,7 +33,7 @@ class player{
         void changeWinState(bool isWin);
         bool isDead();
         void changeDeadState(bool isDead);
-        
+        vector<key> keysInInventory = {};
         bool wallJumped = false;
         void collisionCheck(Rectangle otherRect);
         bool keyCheck(Rectangle otherRect);

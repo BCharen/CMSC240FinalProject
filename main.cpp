@@ -13,9 +13,10 @@ using namespace std;
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
 Rectangle obstacleTextureDimensions{0,0,1220,780};
 
-int screenWidth = 1500;
-int screenHeight = 1500;
+int screenWidth = 1920;
+int screenHeight = 1080;
 Color darkGreen = {43, 51, 24, 255};
+Color keyColor = {242,132,17,255};
 player zippy = player();
 Camera2D cam = { 0 };
 
@@ -23,11 +24,15 @@ Texture2D pib;
 Texture2D labDoor;
 Texture2D obstacleTexture;
 
+bool toggleDrawInventory = false;
+int inventoryIndex = 0;
+
 //messages
 bool drawState = false;
 Message defaultMessage{0, 0, "Default"};
 Message& currentMessage = defaultMessage;
 
+Message introductionMessage = {0, 0, "Introduction"};
 Message winMessage{0, 0, "You found pibble! Win or something"};
 Message loseMessage{0, 0, "You fell off the map :("};
 Message touchObstacleMessage{0, 0, "You touched the danger :("};
@@ -117,6 +122,62 @@ void restartGame(vector<level*>* lvls){
     }
 }
 
+void drawInventory(){
+    if(IsKeyPressed(KEY_ONE)){
+        inventoryIndex = 0;
+    } else if (IsKeyPressed(KEY_TWO)){
+        inventoryIndex = 1;
+    } else if (IsKeyPressed(KEY_THREE)){
+        inventoryIndex = 2;
+    } else if (IsKeyPressed(KEY_FOUR)){
+        inventoryIndex = 3;
+    } else if (IsKeyPressed(KEY_FIVE)){
+        inventoryIndex = 4;
+    } else if (IsKeyPressed(KEY_SIX)){
+        inventoryIndex = 5;
+    }
+    DrawRectangleRec((Rectangle){50, 50, 600, 120}, GRAY);
+    DrawRectangleRec((Rectangle){50, 50, 600, 20}, darkGreen);
+    DrawRectangleRec((Rectangle){50, 150, 600, 20}, darkGreen);
+    DrawRectangleRec((Rectangle){50, 50, 20, 120}, darkGreen);
+    DrawRectangleRec((Rectangle){150, 50, 20, 120}, darkGreen);
+    DrawRectangleRec((Rectangle){250, 50, 20, 120}, darkGreen);
+    DrawRectangleRec((Rectangle){350, 50, 20, 120}, darkGreen);
+    DrawRectangleRec((Rectangle){450, 50, 20, 120}, darkGreen);
+    DrawRectangleRec((Rectangle){550, 50, 20, 120}, darkGreen);
+    DrawRectangleRec((Rectangle){650, 50, 20, 120}, darkGreen);
+    switch (inventoryIndex) {
+        case 0:
+            DrawRectangleRec((Rectangle){70, 70, 80, 80}, WHITE);
+            break;
+        case 1:
+            DrawRectangleRec((Rectangle){170, 70, 80, 80}, WHITE);
+            break;
+        case 2:
+            DrawRectangleRec((Rectangle){270, 70, 80, 80}, WHITE);
+            break;
+        case 3:
+            DrawRectangleRec((Rectangle){370, 70, 80, 80}, WHITE);
+            break;
+        case 4:
+            DrawRectangleRec((Rectangle){470, 70, 80, 80}, WHITE);
+            break;
+        case 5:
+            DrawRectangleRec((Rectangle){570, 70, 80, 80}, WHITE);
+            break;
+        default:
+            break;
+    }
+    if (inventoryIndex < (int)zippy.keysInInventory.size()){
+    DrawText(zippy.keysInInventory[inventoryIndex].name.c_str(), 50, 200, 50, WHITE);
+    }
+    int drawIndex = 0;
+    for (auto item : zippy.keysInInventory){
+        DrawRectangleRec((Rectangle){95.0f + 100*drawIndex, 105.0f, item.shape.width, item.shape.height}, keyColor);
+        drawIndex++;
+    }
+}
+
 void updateEnvironment(level &curLevel){
 
     //Draw Pib texture
@@ -158,6 +219,10 @@ void updateEnvironment(level &curLevel){
         return;
     }
 
+    if(IsKeyPressed(KEY_TAB)){
+        toggleDrawInventory = !toggleDrawInventory;
+    }
+
     zippy.setOnLadder(false);
     for (auto &ladder : curLevel.ladders){
         if(!zippy.getOnLadder()){
@@ -173,8 +238,11 @@ void updateEnvironment(level &curLevel){
 
     for (auto &key : curLevel.keys){
         if(key.show == true){
-        DrawRectangleRec(key.shape,{242,132,17,255});
-        key.setShow(zippy.keyCheck(key.shape));
+            DrawRectangleRec(key.shape, keyColor);
+            if (zippy.overlapCheck(key.shape)){
+                key.setShow(false);
+                zippy.keysInInventory.push_back(key);
+            }
         }
     }
 
@@ -273,10 +341,17 @@ int main () {
     //connect doors and keys
 
     testLevel.doors[0].correspondingKey = &testLevel.keys[0];
+    testLevel.keys[0].name = "Test Level Key";
 
     level2.doors[0].correspondingKey = &level2.keys[0];
+    level2.keys[0].name = "First Door Key";
     level2.doors[1].correspondingKey = &level2.keys[1];
+    level2.keys[1].name = "Second Door Key";
 
+    //Introduction screen
+
+    currentMessage = introductionMessage;
+    drawState = true;
 
     SetTargetFPS(FPS);
     while (WindowShouldClose() == false){
@@ -309,6 +384,10 @@ int main () {
                 zippy.lrInputCheck();
                 zippy.Update();
                 EndMode2D();
+
+                if(toggleDrawInventory){
+                    drawInventory();
+                }
             }
         EndDrawing();
     }    
