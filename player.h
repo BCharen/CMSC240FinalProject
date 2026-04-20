@@ -24,7 +24,7 @@ class player{
         bool onZip = false;
         bool win = false;
         bool dead = false;
-        Vector2 zipTarget;
+        Rectangle zipTarget;
     public:
         //x,y,width,height
         Rectangle position = {500,500,50,100};
@@ -43,7 +43,7 @@ class player{
         }
         bool getOnLadder();
         void setOnLadder(bool val);
-        void startZip(Vector2 start, Vector2 end);
+        void startZip(Rectangle start, Rectangle end);
         void Update(){
             if(!onZip){
                 if(!onLadder || wallJumped){
@@ -65,9 +65,15 @@ class player{
                 HorColDir = NONE;
             }
             else {
-                position.y+=zipVelocity.y;
+
+                //zipline max speed and acceleration rate, tune as nescessary to make it feel good
+
+                if (Vector2Length(zipVelocity) < 180){
+                    zipVelocity += Vector2Normalize(Vector2Subtract({zipTarget.x, zipTarget.y}, {position.x, position.y})) * 18 * GetFrameTime();
+                }
                 position.x+=zipVelocity.x;
-                if(position.x == zipTarget.x && position.y == zipTarget.y){
+                position.y+=zipVelocity.y;
+                if(CheckCollisionRecs(position,zipTarget)){
                     onZip = false;
                 }
             }

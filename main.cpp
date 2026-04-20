@@ -73,7 +73,7 @@ level testLevel = {
 { },
 {Obstacle{200,50,50,{300,0},{200,500}}},
 {500, 500},
-{{900,500,25,100} , {2550,1100,25,100}, &win}
+{{900,500,25,100} , {3500,1300,25,100}, &win}
 };
 
 level level2 = {
@@ -200,7 +200,7 @@ void updateEnvironment(level &curLevel){
 
         if(zippy.overlapCheck(curLevel.objective.getPoleOne())){ 
             if(IsKeyPressed(KEY_SPACE)){
-                zippy.startZip(curLevel.objective.getZipStart(),curLevel.objective.getZipEnd());
+                zippy.startZip(curLevel.objective.pole1,curLevel.objective.pole2);
             }
         }
 
@@ -275,13 +275,13 @@ void updateEnvironment(level &curLevel){
         DrawRectangleRec(zip.pole1,DARKGREEN);
         if(zippy.overlapCheck(zip.pole1)){ 
             if(IsKeyPressed(KEY_SPACE)){
-                zippy.startZip(zip.getZipStart(),zip.getZipEnd());
+                zippy.startZip(zip.pole1,zip.pole2);
             }
         }
         DrawRectangleRec(zip.pole2,DARKGREEN);
         if(zippy.overlapCheck(zip.pole2)){ 
             if(IsKeyPressed(KEY_SPACE)){
-                zippy.startZip(zip.getZipEnd(),zip.getZipStart());
+                zippy.startZip(zip.pole1,zip.pole2);
             }
         }
         DrawLineEx(zip.getZipStart(),zip.getZipEnd(),10,DARKGREEN);

@@ -105,11 +105,11 @@ void player::lrInputCheck(){
     }
 }
 
-void player::startZip(Vector2 start, Vector2 end){
+void player::startZip(Rectangle start, Rectangle end){
     if (start.y <= end.y){
     position.x = start.x;
     position.y = start.y;
-    zipVelocity = {(end.x-start.x)/100,(end.y-start.y)/100};
+    zipVelocity = Vector2Normalize({end.x-start.x,end.y-start.y}) * 5;
     zipTarget = end;
     onZip = true;
     }
