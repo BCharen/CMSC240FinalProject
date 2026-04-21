@@ -109,7 +109,7 @@ void player::startZip(Rectangle start, Rectangle end){
     if (start.y <= end.y){
     position.x = start.x;
     position.y = start.y;
-    zipVelocity = Vector2Normalize({end.x-start.x,end.y-start.y}) * 5;
+    zipVelocity = Vector2Normalize({end.x-start.x,end.y-start.y}) * 2;
     zipTarget = end;
     onZip = true;
     }
