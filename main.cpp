@@ -2,6 +2,7 @@
 #include <raylib.h>
 #include <string.h>
 #include "player.h"
+#include "AudioManager.h"
 #include <array>
 #include "level.h"
 using namespace std;
@@ -9,6 +10,8 @@ using namespace std;
 #define TEST false
 #define KILLZONE 1400
 #define FPS 60
+
+AudioManager songs;
 
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
 Rectangle obstacleTextureDimensions{0,0,1220,780};
@@ -306,7 +309,22 @@ void updateCam(Camera2D *camera, player *play){
     camera->offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
     camera->target = (Vector2){ zippy.position.x,zippy.position.y };
 }
+
+void updateAudio(AudioManager songs){
+    if(songs.getValidSongs()){
+        if(!IsMusicStreamPlaying(songs.getCurSong())){
+            PlayMusicStream(songs.getCurSong());
+        }
+    }
+}
+
+void loadSongs(AudioManager songs){
+    const char* song1 = "test.mp3";
+    songs.loadSong(song1);
+}
+
 int main () {
+    loadSongs(songs);
 
     if(TEST){
         currentLevelSet = &levelSetTest; 
@@ -376,6 +394,7 @@ int main () {
             } else {
                 BeginMode2D(cam);
                 updateEnvironment(*currentLevel);
+                updateAudio(songs);
                 zippy.Draw();
                 zippy.lrInputCheck();
                 zippy.Update();
