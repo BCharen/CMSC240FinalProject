@@ -64,8 +64,9 @@
         return (Vector2){pole.x+(pole.width/2),pole.y};
     }
 
-    Message::Message(float x, float y, const char* msg){
-        shape = Rectangle{x, y, 25, 25};
+    Message::Message(float x, float y, const char* msg, Texture2D* messageTexture){
+        note = *messageTexture;
+        shape = Rectangle{x, y, 20, 30};
         text = msg;
     }
 
@@ -81,7 +82,12 @@
     }
 
     void Message::drawTexture(){
-        DrawRectangleRec(shape, color);
+        DrawTexturePro(note, Rectangle{0, 0, 20, 30}, shape, (Vector2){0, 0}, 0,  WHITE);
+    }
+
+    void Message::renderReadMessage(){
+        //broken, need to fix
+        DrawTexturePro(note, Rectangle{0, 0, 20, 30}, Rectangle{shape.x, shape.y, shape.width * 10, shape.height * 10}, (Vector2){0, 0}, 0,  WHITE);
     }
 
     Rectangle Message::getShape(){

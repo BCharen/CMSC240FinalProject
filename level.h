@@ -61,17 +61,20 @@ class Zipline{
 class Message{
     private:
     Rectangle shape;
+    Texture2D note;
     const char* text;
     Color color = {255,255,255,255};
 
     public:
-    Message(float x, float y, const char* msg);
+    Message(float x, float y, const char* msg, Texture2D* messageTexture);
 
     Vector2 getCenteredPosition();
 
     void drawTextScreen();
 
     void drawTexture();
+
+    void renderReadMessage();
 
     Rectangle getShape();
 

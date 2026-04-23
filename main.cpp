@@ -23,22 +23,24 @@ Camera2D cam = { 0 };
 Texture2D pib;
 Texture2D labDoor;
 Texture2D obstacleTexture;
+Texture2D defaultMessageTexture;
+Texture2D note;
 
 bool toggleDrawInventory = false;
 int inventoryIndex = 0;
 
 //messages
 bool drawState = false;
-Message defaultMessage{0, 0, "Default"};
+Message defaultMessage{0, 0, "Default", &defaultMessageTexture};
 Message& currentMessage = defaultMessage;
 
-Message introductionMessage = {0, 0, "Introduction"};
-Message winMessage{0, 0, "You found pibble! Win or something"};
-Message loseMessage{0, 0, "You fell off the map :("};
-Message touchObstacleMessage{0, 0, "You touched the danger :("};
-Message loadingScreen{0, 0, "Loading..."};
-Message m1{150,550, "I need to find pibble, but how?"};
-Message m2{3450,750, "How do I unlock this door?"};
+Message introductionMessage = {0, 0, "Introduction", &defaultMessageTexture};
+Message winMessage{0, 0, "You found pibble! Win or something", &defaultMessageTexture};
+Message loseMessage{0, 0, "You fell off the map :(", &defaultMessageTexture};
+Message touchObstacleMessage{0, 0, "You touched the danger :(", &defaultMessageTexture};
+Message loadingScreen{0, 0, "Loading...", &defaultMessageTexture};
+Message m1{150,550, "I need to find pibble, but how?", &note};
+Message m2{3450,750, "How do I unlock this door?", &note};
 /*
 Each line is a different type of object. In order they are:
 walls: Rectangle for position.
@@ -268,7 +270,7 @@ void updateEnvironment(level &curLevel){
             drawState = true;
             break;
         }
-        message.drawTexture();
+        DrawTexturePro(note, Rectangle{0, 0, 20, 30}, message.getShape(), (Vector2){0, 0}, 0,  WHITE);
     }
 
     for (auto &zip : curLevel.zips){
@@ -332,6 +334,7 @@ int main () {
     pib = LoadTexture("textures/pibble.png"); 
     labDoor = LoadTexture("textures/door.png"); 
     obstacleTexture = LoadTexture("textures/danger.png"); 
+    note = LoadTexture("textures/note.png");
 
 
     //connect doors and keys

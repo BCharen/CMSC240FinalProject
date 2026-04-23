@@ -17,7 +17,7 @@ class player{
     private:
         Vector2 velocity = {0,0};
         Vector2 zipVelocity;
-        int acceleration = 5;
+        int gravity = 5;
         int VertColDir = NONE;
         int HorColDir = NONE;
         bool onLadder = false;
@@ -48,7 +48,7 @@ class player{
             if(!onZip){
                 if(!onLadder || wallJumped){
                     //gravity setting
-                    velocity.y += acceleration * GetFrameTime() * 3.5;
+                    velocity.y += gravity * GetFrameTime() * 3.5;
                 }
 
                 if(!((VertColDir == UP && velocity.y < 0)||(VertColDir == DOWN && velocity.y > 0))){
@@ -69,7 +69,7 @@ class player{
                 //zipline max speed and acceleration rate, tune as nescessary to make it feel good
 
                 if (Vector2Length(zipVelocity) < 180){
-                    zipVelocity += Vector2Normalize(Vector2Subtract({zipTarget.x, zipTarget.y}, {position.x, position.y})) * acceleration * 4 * GetFrameTime();
+                    zipVelocity += Vector2Normalize(Vector2Subtract({zipTarget.x, zipTarget.y}, {position.x, position.y})) * gravity * 4 * GetFrameTime();
                 }
                 position.x+=zipVelocity.x;
                 position.y+=zipVelocity.y;
