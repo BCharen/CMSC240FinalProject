@@ -34,15 +34,17 @@ int inventoryIndex = 0;
 
 //messages
 bool drawState = false;
+bool readState = false;
+int readIndex = 0;
 Message defaultMessage{0, 0, "Default", &defaultMessageTexture};
 Message& currentMessage = defaultMessage;
 
-Message introductionMessage = {0, 0, "Introduction", &defaultMessageTexture};
+Message introductionMessage = {0, 0, "Press space to interact with everything", &defaultMessageTexture};
 Message winMessage{0, 0, "You found pibble! Win or something", &defaultMessageTexture};
 Message loseMessage{0, 0, "You fell off the map :(", &defaultMessageTexture};
 Message touchObstacleMessage{0, 0, "You touched the danger :(", &defaultMessageTexture};
 Message loadingScreen{0, 0, "Loading...", &defaultMessageTexture};
-Message m1{150,550, "I need to find pibble, but how?", &note};
+Message m1{150,550, "I need to find pibble, but how? \n Pibble Pibble Pibble Pibble Pibble Pibble", &note};
 Message m2{3450,750, "How do I unlock this door?", &note};
 /*
 Each line is a different type of object. In order they are:
@@ -270,7 +272,7 @@ void updateEnvironment(level &curLevel){
     for (auto &message : curLevel.messages){
         if(zippy.overlapCheck(message.getShape()) && IsKeyPressed(KEY_SPACE)){ 
             currentMessage = message;
-            drawState = true;
+            readState = true;
             break;
         }
         message.drawTexture();
@@ -399,12 +401,35 @@ int main () {
                 updateEnvironment(*currentLevel);
                 updateAudio(songs);
                 zippy.Draw();
-                zippy.lrInputCheck();
+                if(!readState){
+                    zippy.lrInputCheck();
+                }
                 zippy.Update();
                 EndMode2D();
 
                 if(toggleDrawInventory){
                     drawInventory();
+                }
+                if(readState){
+                    zippy.setVelocity({0,0});
+                    vector<string> linesOfText = currentMessage.wrapText(800);
+                    currentMessage.renderReadMessage();
+                    if (IsKeyPressed(KEY_E)){
+                        currentMessage = defaultMessage;
+                        readState = false;
+                        readIndex = 0;
+                    }
+                    if ((IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT)) && readIndex > 0){
+                        readIndex--;
+                    }
+                    if ((IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT)) && readIndex < (int)linesOfText.size() - 1){
+                        readIndex++;
+                    }
+                    DrawRectangleRec((Rectangle){800, 400, 1050, 320}, GRAY);
+                    DrawRectangleRec((Rectangle){820, 420, 1010, 280}, BLACK);
+                    DrawText(linesOfText[readIndex].c_str(), 880, 540, 40, WHITE);
+                    DrawText("E - Exit   A - Previous   D - Next", 880, 880, 25, WHITE);
+
                 }
             }
         EndDrawing();

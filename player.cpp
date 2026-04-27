@@ -31,6 +31,10 @@ void player::collisionCheck(Rectangle otherRect){
 
 }
 
+void player::setVelocity(Vector2 v){
+    velocity = v;
+}
+
 bool player::keyCheck(Rectangle otherRect){
     return !CheckCollisionRecs(position,otherRect);
 }

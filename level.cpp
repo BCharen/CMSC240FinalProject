@@ -1,5 +1,6 @@
 #include "level.h"
 
+#define FONTSIZE 20
     Obstacle::Obstacle(float width, float height, int s, Vector2 sP, Vector2 eP){
         startPoint = sP;
         endPoint = eP;
@@ -86,9 +87,60 @@
     }
 
     void Message::renderReadMessage(){
-        //broken, need to fix
-        DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, Rectangle{shape.x, shape.y, shape.width * 10, shape.height * 10}, (Vector2){0, 0}, 0,  WHITE);
+        DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, Rectangle{200, 150, shape.width * 25, shape.height * 25}, (Vector2){0, 0}, 0,  WHITE);
     }
+
+    vector<string> Message::wrapText(float maxWidth) {
+        vector<string> lines;
+
+        string currentLine = "";
+        string word = "";
+
+        for (int i = 0; text[i] != '\0'; i++) {
+            char c = text[i];
+
+            if (c == ' ' || c == '\n') {
+                string testLine = currentLine.empty() ? word : currentLine + " " + word;
+
+                Vector2 size = MeasureTextEx(GetFontDefault(), testLine.c_str(), FONTSIZE, 2.0f);
+
+                if (size.x > maxWidth) {
+                    if (!currentLine.empty()) lines.push_back(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+
+                word = "";
+
+                if (c == '\n') {
+                    lines.push_back(currentLine);
+                    currentLine = "";
+                }
+            } else {
+                word += c;
+            }
+        }
+
+        // last word
+        if (!word.empty()) {
+            string testLine = currentLine.empty() ? word : currentLine + " " + word;
+
+            Vector2 size = MeasureTextEx(GetFontDefault(), testLine.c_str(), FONTSIZE, 2.0f);
+
+            if (size.x > maxWidth) {
+                if (!currentLine.empty()) lines.push_back(currentLine);
+                lines.push_back(word);
+            } else {
+                currentLine = testLine;
+            }
+        }
+
+        if (!currentLine.empty()) lines.push_back(currentLine);
+
+        return lines;
+    }
+
 
     Rectangle Message::getShape(){
         return shape;
