@@ -273,7 +273,7 @@ void updateEnvironment(level &curLevel){
             drawState = true;
             break;
         }
-        DrawTexturePro(note, Rectangle{0, 0, 20, 30}, message.getShape(), (Vector2){0, 0}, 0,  WHITE);
+        message.drawTexture();
     }
 
     for (auto &zip : curLevel.zips){

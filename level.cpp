@@ -65,7 +65,7 @@
     }
 
     Message::Message(float x, float y, const char* msg, Texture2D* messageTexture){
-        note = *messageTexture;
+        note = messageTexture;
         shape = Rectangle{x, y, 20, 30};
         text = msg;
     }
@@ -82,12 +82,12 @@
     }
 
     void Message::drawTexture(){
-        DrawTexturePro(note, Rectangle{0, 0, 20, 30}, shape, (Vector2){0, 0}, 0,  WHITE);
+        DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, shape, (Vector2){0, 0}, 0,  WHITE);
     }
 
     void Message::renderReadMessage(){
         //broken, need to fix
-        DrawTexturePro(note, Rectangle{0, 0, 20, 30}, Rectangle{shape.x, shape.y, shape.width * 10, shape.height * 10}, (Vector2){0, 0}, 0,  WHITE);
+        DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, Rectangle{shape.x, shape.y, shape.width * 10, shape.height * 10}, (Vector2){0, 0}, 0,  WHITE);
     }
 
     Rectangle Message::getShape(){
@@ -96,6 +96,10 @@
 
     Color Message::getColor(){
         return color;
+    }
+
+    Texture2D Message::getNote(){
+        return *note;
     }
 
     LevelObjective::LevelObjective(Rectangle rec, level* toLevel){

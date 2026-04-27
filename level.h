@@ -61,7 +61,7 @@ class Zipline{
 class Message{
     private:
     Rectangle shape;
-    Texture2D note;
+    Texture2D* note;
     const char* text;
     Color color = {255,255,255,255};
 
@@ -79,6 +79,8 @@ class Message{
     Rectangle getShape();
 
     Color getColor();
+
+    Texture2D getNote();
 };
 
 class LevelObjective : public Zipline{
