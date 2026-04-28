@@ -1,8 +1,3 @@
-/**
- * @file main.cpp
- * @brief Runs the level
- */
-
 #include <iostream>
 #include <raylib.h>
 #include <string.h>
@@ -123,7 +118,10 @@ vector<level*>* currentLevelSet;
 level* currentLevel;
 level* startingLevel;
 
-
+/**
+ * @brief Resets all the keys back to their initial position
+ * @param lvl level to reset
+ */
 void restartLevel(level* lvl){
     for (auto &key : (*lvl).keys){
         key.setShow(true);
@@ -131,12 +129,19 @@ void restartLevel(level* lvl){
     }
 }
 
+/**
+ * @brief restarts all levels in the levelSet
+ * @param lvls the levelset being used
+ */
 void restartGame(vector<level*>* lvls){
     for (auto &level : *lvls){
         restartLevel(level);
     }
 }
 
+/**
+ * @brief displays the inventory
+ */
 void drawInventory(){
     if(IsKeyPressed(KEY_ONE)){
         inventoryIndex = 0;
@@ -193,6 +198,10 @@ void drawInventory(){
     }
 }
 
+/**
+ * @brief Updates the state of everything in the current level
+ * @param curLevel the level currently running 
+ */
 void updateEnvironment(level &curLevel){
 
     //Draw Pib texture
@@ -329,11 +338,21 @@ void updateEnvironment(level &curLevel){
 
         
 } 
+
+/**
+ * @brief moves the camera to keep the player centered
+ * @param camera pointer to the camera
+ * @param play pointer to the player
+ */
 void updateCam(Camera2D *camera, player *play){
     camera->offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
     camera->target = (Vector2){ zippy.position.x,zippy.position.y };
 }
 
+/**
+ * @brief Plays the current song
+ * @param songs the AudioManager being used
+ */
 void updateAudio(AudioManager songs){
     Sound s = *songs.getCurSong();
         if(!IsSoundPlaying(s)){
@@ -341,7 +360,9 @@ void updateAudio(AudioManager songs){
         }
 }
 
-
+/**
+ * @brief Runs the game
+ */
 int main () {
 
     if(TEST){

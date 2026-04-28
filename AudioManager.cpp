@@ -1,14 +1,14 @@
 #include "AudioManager.h"
 
 /**
- * @brief Initializes an AudioManager with all of the level songs
+ * @brief Constructor for an AudioManager with all of the level songs
  */
 AudioManager::AudioManager(){
     InitAudioDevice();
     SetMasterVolume(0.3);
-    level1Song = LoadSound("stage1.wav");
-    level2Song = LoadSound("stage2.wav");
-    level3Song = LoadSound("stage3.wav");
+    level1Song = LoadSound("audio/stage1.wav");
+    level2Song = LoadSound("audio/stage2.wav");
+    level3Song = LoadSound("audio/stage3.wav");
     curSong = 0;
 }
 
