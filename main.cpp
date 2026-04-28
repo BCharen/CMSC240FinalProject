@@ -13,8 +13,10 @@ using namespace std;
 
 AudioManager songs = AudioManager();
 
+Rectangle defaultRectangle{0,0,0,0};
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
 Rectangle obstacleTextureDimensions{0,0,1220,780};
+Rectangle currentLadder = defaultRectangle;
 
 int screenWidth = 1920;
 int screenHeight = 1080;
@@ -44,7 +46,7 @@ Message winMessage{0, 0, "You found pibble! Win or something", &defaultMessageTe
 Message loseMessage{0, 0, "You fell off the map :(", &defaultMessageTexture};
 Message touchObstacleMessage{0, 0, "You touched the danger :(", &defaultMessageTexture};
 Message loadingScreen{0, 0, "Loading...", &defaultMessageTexture};
-Message m1{150,550, "I need to find pibble, but how? \n Pibble Pibble Pibble Pibble Pibble Pibble", &note};
+Message m1{150,550, "I need to find pibble, but how? \n Pibble Pibble Pibble Pibble Pibble Pibble \n i like femboys", &note};
 Message m2{3450,750, "How do I unlock this door?", &note};
 /*
 Each line is a different type of object. In order they are:
@@ -233,12 +235,23 @@ void updateEnvironment(level &curLevel){
         toggleDrawInventory = !toggleDrawInventory;
     }
 
-    zippy.setOnLadder(false);
     for (auto &ladder : curLevel.ladders){
-        if(!zippy.getOnLadder()){
-            zippy.setOnLadder(zippy.overlapCheck(ladder));
-        }
         DrawRectangleRec(ladder,{32,0,200,255});
+
+        if(zippy.overlapCheck(currentLadder) && !IsKeyPressed(KEY_SPACE)){
+            continue;
+        } else {
+            if (IsKeyPressed(KEY_SPACE)){
+                zippy.setVelocity({0,-5});
+            }
+            zippy.setOnLadder(false);
+            currentLadder = defaultRectangle;
+        }
+        
+        if(!zippy.getOnLadder() && zippy.overlapCheck(ladder) && (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))){
+            zippy.setOnLadder(true);
+            currentLadder = ladder;
+        }
     }
 
     for (auto &wall : curLevel.walls){
