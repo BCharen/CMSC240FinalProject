@@ -17,6 +17,7 @@ void player::collisionCheck(Rectangle otherRect){
     }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
         VertColDir = DOWN;
+        isJumping = false;
         velocity.y = 0;
     }
 
@@ -62,6 +63,10 @@ bool player::getOnLadder(){
  * @param val new state for onLadder
  */
 void player::setOnLadder(bool val){
+    if(isJumping) {
+        onLadder = false;
+        return;
+    }
     onLadder = val;
 }
 
@@ -115,7 +120,7 @@ void player::InputCheck(){
         else if 
         ((IsKeyDown(KEY_S)||IsKeyDown(KEY_DOWN)) && VertColDir != DOWN){velocity.y = 5;} 
         else {velocity.y = 0;}
-    } else if (IsKeyDown(KEY_SPACE) && VertColDir == DOWN){
+    } else if (IsKeyDown(KEY_SPACE) && (VertColDir == DOWN || onLadder)){
         if (HorColDir == LEFT){
             velocity.x = 3;
             wallJumped = true;
@@ -140,6 +145,42 @@ void player::startZip(Rectangle start, Rectangle end){
     zipTarget = end;
     onZip = true;
     }
+}
+
+/**
+ * @brief Updates the player's position
+ */
+void player::Update(){
+    if(!onZip){
+            if(!onLadder || wallJumped){
+                //gravity setting
+                velocity.y += gravity * GetFrameTime() * 3.5;
+            }
+
+            if(!((VertColDir == UP && velocity.y < 0)||(VertColDir == DOWN && velocity.y > 0))){
+                    position.y+=velocity.y;
+            } else {
+                velocity.y = 0;
+            }
+
+            if(!((HorColDir == LEFT && velocity.x < 0)||(HorColDir == RIGHT && velocity.x > 0))){
+                position.x+=velocity.x;
+            }
+
+        VertColDir = NONE;
+        HorColDir = NONE;
+    }
+    else {
+        //zipline max speed and acceleration rate, tune as nescessary to make it feel good
+        if (Vector2Length(zipVelocity) < 180){
+            zipVelocity += Vector2Normalize(Vector2Subtract({zipTarget.x, zipTarget.y}, {position.x, position.y})) * gravity * 4 * GetFrameTime();
+        }
+        position.x+=zipVelocity.x;
+        position.y+=zipVelocity.y;
+        if(CheckCollisionRecs(position,zipTarget)){
+            onZip = false;
+        }
+}
 }
 
 /**

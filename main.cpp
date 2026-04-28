@@ -226,6 +226,7 @@ void updateEnvironment(level &curLevel){
         if(zippy.overlapCheck(curLevel.objective.getPoleOne())){ 
             if(IsKeyPressed(KEY_SPACE)){
                 zippy.startZip(curLevel.objective.pole1,curLevel.objective.pole2);
+                songs.setFading(true);
             }
         }
 
@@ -235,6 +236,7 @@ void updateEnvironment(level &curLevel){
             drawState = true;
             StopSound(*songs.getCurSong());
             songs.nextSong();
+            songs.setFading(false);
             zippy.spawn(currentLevel);
         }
     }
@@ -251,25 +253,13 @@ void updateEnvironment(level &curLevel){
         toggleDrawInventory = !toggleDrawInventory;
     }
 
+    zippy.setOnLadder(false);
     for (auto &ladder : curLevel.ladders){
+        if(!zippy.getOnLadder()){
+            zippy.setOnLadder(zippy.overlapCheck(ladder));
+        }
         DrawRectangleRec(ladder,{32,0,200,255});
-
-        if(zippy.overlapCheck(currentLadder) && !IsKeyPressed(KEY_SPACE)){
-            continue;
-        } else {
-            if (IsKeyPressed(KEY_SPACE)){
-                zippy.setVelocity({0,-5});
-            }
-            zippy.setOnLadder(false);
-            currentLadder = defaultRectangle;
-        }
-        
-        if(!zippy.getOnLadder() && zippy.overlapCheck(ladder) && (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))){
-            zippy.setOnLadder(true);
-            currentLadder = ladder;
-        }
     }
-
     for (auto &wall : curLevel.walls){
         DrawRectangleRec(wall,{42,2,57,255});
         zippy.collisionCheck(wall);
@@ -360,6 +350,7 @@ void updateAudio(AudioManager songs){
         if(!IsSoundPlaying(s)){
             PlaySound(s); 
         }
+    songs.Fade();
 }
 
 /**

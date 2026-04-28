@@ -10,8 +10,13 @@ class AudioManager{
     Sound level2Song;
     Sound level3Song;
     int curSong;
+    bool fading;
+    float curVolume;
+    float fadeSpeed = 0.001;
     public:
     AudioManager();
+    void setFading(bool state);
+    void Fade();
     Sound* getCurSong();
     void nextSong();
     void unloadAll();

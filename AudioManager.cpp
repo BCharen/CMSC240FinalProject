@@ -5,13 +5,32 @@
  */
 AudioManager::AudioManager(){
     InitAudioDevice();
-    SetMasterVolume(0.3);
+    curVolume = 0.3;
+    SetMasterVolume(curVolume);
     level1Song = LoadSound("audio/stage1.wav");
     level2Song = LoadSound("audio/stage2.wav");
     level3Song = LoadSound("audio/stage3.wav");
     curSong = 0;
 }
 
+/**
+ * @brief starts the music fading out
+ */
+void AudioManager::Fade(){
+    if(fading && curVolume >= 0){
+    SetSoundVolume(*getCurSong(),curVolume = curVolume - fadeSpeed);
+    }
+}
+
+/**
+ * @brief sets the state and speed of fading
+ * @param state the new state for fading
+ */
+void AudioManager::setFading(bool state){
+    fading = state;
+    curVolume = 0.3;
+    //fadeSpeed = player
+}
 /**
  * @brief Getter for the current song
  * @return returns a pointer to the current song
