@@ -414,7 +414,7 @@ int main () {
         currentLevelSet = &levelSet1; 
     }
 
-    startingLevel = (*currentLevelSet)[1];
+    startingLevel = (*currentLevelSet)[0];
     currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);
@@ -478,11 +478,7 @@ int main () {
                         zippy.spawn(currentLevel);
                     }
                     if (zippy.checkWin()){
-                        restartGame(currentLevelSet);
-                        zippy.changeDeadState(false);
-                        zippy.changeWinState(false);
-                        currentLevel = startingLevel;
-                        zippy.spawn(startingLevel);
+                        exit(0);
                     }
                 }
             } else {
