@@ -473,7 +473,7 @@ int main () {
     level1.keys[0].name = "P.R.F Welcome Center key";
     level1.doors[1].correspondingKey = &level1.keys[1];
     level1.keys[1].name = "Backdoor key";
-
+    
     //Introduction screen
 
     currentMessage = introductionMessage;
