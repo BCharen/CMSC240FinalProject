@@ -1,5 +1,9 @@
 #include "player.h"
 
+/**
+ * @brief collides the player with walls and floors/ceilings
+ * @param otherRect The rectangle we are checking if we are collding with
+ */
 void player::collisionCheck(Rectangle otherRect){
     if(!CheckCollisionRecs(position,otherRect)){
         return;
@@ -10,51 +14,66 @@ void player::collisionCheck(Rectangle otherRect){
     if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=6) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
         velocity.y = 0;
-        //position.y = otherRect.y + otherRect.height;
     }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
         VertColDir = DOWN;
         velocity.y = 0;
-        //position.y = otherRect.y - position.height;
     }
 
     if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = LEFT;
         velocity.x = 0;
-        //position.x = otherRect.x + otherRect.width;
     }
     else if(otherRect.x <= position.x+position.width && (position.x+position.width-otherRect.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = RIGHT;
         velocity.x = 0;
-        //position.x = otherRect.x - position.width;
     }
 
 }
 
+/**
+ * @brief Setter for player velocity
+ * @param v new velocity
+ */
 void player::setVelocity(Vector2 v){
     velocity = v;
 }
 
-bool player::keyCheck(Rectangle otherRect){
-    return !CheckCollisionRecs(position,otherRect);
-}
 
+/**
+ * @brief checks if the player is overlapping with another rectangle
+ * @param otherRect the rectangle to check overlap with
+ * @return whether or not the player is overlapping the other rectangle
+ */
 bool player::overlapCheck(Rectangle otherRect){
     return CheckCollisionRecs(position,otherRect);
 }
 
+/**
+ * @brief checks if the players in on a ladder
+ * @return the value of onLadder
+ */
 bool player::getOnLadder(){
     return onLadder;
 }
 
+/**
+ * @brief sets the value of onLadder
+ * @param val new state for onLadder
+ */
 void player::setOnLadder(bool val){
     onLadder = val;
 }
-void player::lrInputCheck(){
+
+/**
+ * 
+ * @brief handles all input for player movement
+ */
+void player::InputCheck(){
     if (VertColDir != NONE || HorColDir != NONE){
         wallJumped = false;
     }
-    
+
     if (wallJumped){
         if (velocity.x > 0){
             if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
@@ -75,10 +94,10 @@ void player::lrInputCheck(){
                 velocity.x = -1;
             }
         }
-        
+
         return;
     }
-    
+
     if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
         velocity.x = -5;
     }
@@ -86,7 +105,7 @@ void player::lrInputCheck(){
     else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
         velocity.x = 5;
     } 
-    
+
     else{
         velocity.x = 0;
     }
@@ -109,6 +128,11 @@ void player::lrInputCheck(){
     }
 }
 
+/**
+ * @brief starts the player along a zipline
+ * @param start the starting pole for the zipline
+ * @param end the ending pole for the zipline
+ */
 void player::startZip(Rectangle start, Rectangle end){
     if (start.y <= end.y){
     position.x = start.x;
@@ -119,22 +143,42 @@ void player::startZip(Rectangle start, Rectangle end){
     }
 }
 
+/**
+ * @brief Getter for if the player has won
+ * @return the state of win
+ */
 bool player::checkWin(){
     return win;
 }
 
+/**
+ * @brief Setter for the win state
+ * @param isWin new value for the win state
+ */
 void player::changeWinState(bool isWin){
     win = isWin;
 }
 
+/**
+ * @brief Getter for if the player has died
+ * @return the state of dead
+ */
 bool player::isDead(){
     return dead;
 }
 
+/**
+ * @brief Setter for dead state
+ * @param isDead new value for dead state
+ */
 void player::changeDeadState(bool isDead){
     dead = isDead;
 }
 
+/**
+ * @brief spawns the player in the level
+ * @param lvl the current level to spawn into
+ */
 void player::spawn(level* lvl){
     onZip = false;
     zipVelocity = {0, 0};

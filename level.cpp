@@ -151,45 +151,29 @@
         DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, Rectangle{200, 150, shape.width * 25, shape.height * 25}, (Vector2){0, 0}, 0,  WHITE);
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //ADD DOCSTRING
-    //////////////////////////////////////////////////////////////////////////
-    vector<string> Message::wrapText(float maxWidth) {
+    /**
+     *  @brief separates text into smaller sentences at \n, puts them in a vecotr, and returns the vector
+     */
+    vector<string> Message::wrapText() {
         vector<string> lines;
         string currentLine = "";
-        string word = "";
+
         for (int i = 0; text[i] != '\0'; i++) {
             char c = text[i];
-            if (c == ' ' || c == '\n') {
-                string testLine = currentLine.empty() ? word : currentLine + " " + word;
-                Vector2 size = MeasureTextEx(GetFontDefault(), testLine.c_str(), FONTSIZE, 2.0f);
-                if (size.x > maxWidth) {
-                    if (!currentLine.empty()) lines.push_back(currentLine);
-                    currentLine = word;
-                } else {
-                    currentLine = testLine;
-                }
-                word = "";
-                if (c == '\n') {
-                    lines.push_back(currentLine);
-                    currentLine = "";
-                }
+
+            if (c == '\n') {
+                lines.push_back(currentLine);
+                currentLine = "";
             } else {
-                word += c;
+                currentLine += c;
             }
         }
-        // last word
-        if (!word.empty()) {
-            string testLine = currentLine.empty() ? word : currentLine + " " + word;
-            Vector2 size = MeasureTextEx(GetFontDefault(), testLine.c_str(), FONTSIZE, 2.0f);
-            if (size.x > maxWidth) {
-                if (!currentLine.empty()) lines.push_back(currentLine);
-                lines.push_back(word);
-            } else {
-                currentLine = testLine;
-            }
+
+        // Add the last line if there is text after the final '\n'
+        if (!currentLine.empty()) {
+            lines.push_back(currentLine);
         }
-        if (!currentLine.empty()) lines.push_back(currentLine);
+
         return lines;
     }
 
