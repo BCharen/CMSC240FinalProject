@@ -1,23 +1,31 @@
 #include "AudioManager.h"
 
-void AudioManager::loadSong(const char *fileName){
-    Music newSong = LoadMusicStream(fileName);
-    if(IsMusicValid(newSong)){
-        cerr << "valid" << endl;
-        soundtrack.push_back(newSong);
-        validSongs=true;
-    }
-    else {
-        cerr << fileName << endl;
-        UnloadMusicStream(newSong);
-    }
+AudioManager::AudioManager(){
+    InitAudioDevice();
+    SetMasterVolume(0.3);
+    level1Song = LoadSound("stage1.wav");
+    curSong = 0;
+}
 
+void AudioManager::loadSong(const char *fileName){
+    soundtrack = internalLoadSong(fileName);
 }  
 
-Music AudioManager::getCurSong(){
-    return soundtrack.at(curSong);
+vector<const char*> AudioManager::internalLoadSong(const char*fileName){
+    soundtrack.push_back(fileName);
+    return soundtrack;
+}
+
+Sound* AudioManager::getCurSong(){
+    //cout << soundtrack.empty() << endl;
+    return &level1Song;
 }
     
 bool AudioManager::getValidSongs(){
-    return validSongs;
+    return !soundtrack.empty();
+}
+
+void AudioManager::unloadAll(){
+    cout << "unloading songs" << endl;
+    CloseAudioDevice();
 }

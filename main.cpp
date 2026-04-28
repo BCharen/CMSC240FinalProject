@@ -11,7 +11,7 @@ using namespace std;
 #define KILLZONE 1400
 #define FPS 60
 
-AudioManager songs;
+AudioManager songs = AudioManager();
 
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
 Rectangle obstacleTextureDimensions{0,0,1220,780};
@@ -313,15 +313,25 @@ void updateCam(Camera2D *camera, player *play){
 }
 
 void updateAudio(AudioManager songs){
-    if(songs.getValidSongs()){
-        if(!IsMusicStreamPlaying(songs.getCurSong())){
-            PlayMusicStream(songs.getCurSong());
+    
+    // if(songs.getValidSongs()){
+        Sound s = *songs.getCurSong();
+        if(!IsSoundPlaying(s)){
+            PlaySound(s);
+            
         }
-    }
+        else {
+            cout << "isPlaying" << endl;
+        }
+    // }
+    // else {
+    //     cout << "noValid" << endl;
+    // }
+    
 }
 
 void loadSongs(AudioManager songs){
-    const char* song1 = "test.mp3";
+    const char* song1 = "stage1.wav";
     songs.loadSong(song1);
 }
 
@@ -373,6 +383,7 @@ int main () {
     SetTargetFPS(FPS);
     while (WindowShouldClose() == false){
         updateCam(&cam, &zippy);
+        updateAudio(songs);
         BeginDrawing();
         ClearBackground(BLACK);
             if(drawState){
@@ -397,7 +408,6 @@ int main () {
             } else {
                 BeginMode2D(cam);
                 updateEnvironment(*currentLevel);
-                updateAudio(songs);
                 zippy.Draw();
                 zippy.lrInputCheck();
                 zippy.Update();
@@ -409,6 +419,7 @@ int main () {
             }
         EndDrawing();
     }    
+    songs.unloadAll();
     CloseWindow();
 }
 
