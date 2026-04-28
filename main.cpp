@@ -116,7 +116,7 @@ Rectangle{400,1600,200,200}, Rectangle{1000,1600,200,200}, Rectangle{1600,1600,7
 Rectangle{2100,1400,100,50}, Rectangle{2100,1800,100,50}, // short door tops
 },
 {key{Rectangle{285,1945,30,10}}, key{Rectangle{2485,1945,30,10}}, key{Rectangle{3035,1945,30,10}}}, 
-{door{Rectangle{840,450,20,150}}, door{Rectangle{2140,450,20,150}}, door{Rectangle{2840,450,20,150}}, door{Rectangle{2140,1050,20,150}}, door{Rectangle{2840,1050,20,150}}, door{Rectangle{2140,1450,20,150}}, door{Rectangle{2140,1850,20,150}}, },
+{door{Rectangle{2140,450,20,150}}, door{Rectangle{2840,450,20,150}}, door{Rectangle{2140,1050,20,150}}, door{Rectangle{2840,1050,20,150}}, door{Rectangle{2140,1450,20,150}}, door{Rectangle{2140,1850,20,150}}, },
 {Rectangle{625,1000,50,1000}, Rectangle{925,1100,50,900}, Rectangle{1225,1100,50,900}, Rectangle{1525,1200,50,800}, Rectangle{2025,1200,50,400}, Rectangle{2925,400,50,1600}, Rectangle{3125,400,50,1600}, },
 {},
 {},
@@ -473,7 +473,16 @@ int main () {
     level1.keys[0].name = "P.R.F Welcome Center key";
     level1.doors[1].correspondingKey = &level1.keys[1];
     level1.keys[1].name = "Backdoor key";
-    
+    level3.keys[0].name = "Key 1";
+    level3.keys[1].name = "Key 2";
+    level3.keys[2].name = "Key 3";
+    level1.doors[0].correspondingKey = &level3.keys[2];
+    level1.doors[1].correspondingKey = &level3.keys[2];
+    level1.doors[2].correspondingKey = &level3.keys[2];
+    level1.doors[3].correspondingKey = &level3.keys[1];
+    level1.doors[4].correspondingKey = &level3.keys[1];
+    level1.doors[5].correspondingKey = &level3.keys[0];
+    level1.doors[6].correspondingKey = &level3.keys[0];
     //Introduction screen
 
     currentMessage = introductionMessage;
