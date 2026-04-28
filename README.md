@@ -3,8 +3,8 @@
 ## Group Members
 
 - Brendan Charen
-- Kiet
-- Mitch 
+- Kiet Lam
+- Mitch Parker
 
 ## Purpose and Description
 
@@ -27,3 +27,6 @@ While in VSCode, click F5
 
 REPLACE THESE LINES AND ADD YOUR USAGE
 A section describing any AI tools used (including chat conversation links).
+
+Asked Chatgpt to write a function splitting lines into smaller sections and stores them in a vector.
+https://chatgpt.com/share/69f052ca-a94c-83ea-b386-d625c3e21656
