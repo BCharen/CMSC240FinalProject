@@ -259,7 +259,7 @@ void updateEnvironment(level &curLevel){
         if(zippy.overlapCheck(currentLadder) && !IsKeyPressed(KEY_SPACE)){
             continue;
         } else {
-            if (IsKeyPressed(KEY_SPACE)){
+            if (IsKeyPressed(KEY_SPACE) && zippy.overlapCheck(currentLadder)){
                 zippy.setVelocity({0,-5});
             }
             zippy.setOnLadder(false);
@@ -375,7 +375,7 @@ int main () {
         currentLevelSet = &levelSet1; 
     }
 
-    startingLevel = (*currentLevelSet)[0];
+    startingLevel = (*currentLevelSet)[1];
     currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);
