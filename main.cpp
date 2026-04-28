@@ -45,7 +45,7 @@ Message defaultMessage{0, 0, "Default", &defaultMessageTexture};
 Message& currentMessage = defaultMessage;
 
 Message introductionMessage = {0, 0, "Press space to interact with everything", &defaultMessageTexture};
-Message winMessage{0, 0, "You found pibble! Win or something", &defaultMessageTexture};
+Message winMessage{0, 0, "You found pibble!", &defaultMessageTexture};
 Message loseMessage{0, 0, "You fell off the map :(", &defaultMessageTexture};
 Message touchObstacleMessage{0, 0, "You touched the danger :(", &defaultMessageTexture};
 Message loadingScreen{0, 0, "Loading...", &defaultMessageTexture};
