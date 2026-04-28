@@ -1,3 +1,8 @@
+/**
+ * @file main.cpp
+ * @brief Runs the level
+ */
+
 #include <iostream>
 #include <raylib.h>
 #include <string.h>
