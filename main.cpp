@@ -439,7 +439,7 @@ int main () {
                 updateEnvironment(*currentLevel);
                 zippy.Draw();
                 if(!readState){
-                    zippy.lrInputCheck();
+                    zippy.InputCheck();
                 }
                 zippy.Update();
                 EndMode2D();

@@ -151,9 +151,11 @@
         DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, Rectangle{200, 150, shape.width * 25, shape.height * 25}, (Vector2){0, 0}, 0,  WHITE);
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //ADD DOCSTRING
-    //////////////////////////////////////////////////////////////////////////
+    /**
+     * @brief converts the message text into a vector of strings that fit in a textbox of width maxWidth 
+     * @param maxWidth the width of the textBox
+     * @return vector of separated strings
+     */
     vector<string> Message::wrapText(float maxWidth) {
         vector<string> lines;
         string currentLine = "";

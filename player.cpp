@@ -1,5 +1,9 @@
 #include "player.h"
 
+/**
+ * @brief collides the player with walls and floors/ceilings
+ * @param otherRect The rectangle we are checking if we are collding with
+ */
 void player::collisionCheck(Rectangle otherRect){
     if(!CheckCollisionRecs(position,otherRect)){
         return;
@@ -10,47 +14,61 @@ void player::collisionCheck(Rectangle otherRect){
     if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=6) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
         velocity.y = 0;
-        //position.y = otherRect.y + otherRect.height;
     }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
         VertColDir = DOWN;
         velocity.y = 0;
-        //position.y = otherRect.y - position.height;
     }
 
     if(otherRect.x+otherRect.width >= position.x && (otherRect.width+otherRect.x-position.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = LEFT;
         velocity.x = 0;
-        //position.x = otherRect.x + otherRect.width;
     }
     else if(otherRect.x <= position.x+position.width && (position.x+position.width-otherRect.x<=6) && (otherRect.y <= position.y+position.height || otherRect.y+otherRect.height >= position.height)){
         HorColDir = RIGHT;
         velocity.x = 0;
-        //position.x = otherRect.x - position.width;
     }
 
 }
 
+/**
+ * @brief Setter for player velocity
+ * @param v new velocity
+ */
 void player::setVelocity(Vector2 v){
     velocity = v;
 }
 
-bool player::keyCheck(Rectangle otherRect){
-    return !CheckCollisionRecs(position,otherRect);
-}
 
+/**
+ * @brief checks if the player is overlapping with another rectangle
+ * @param otherRect the rectangle to check overlap with
+ * @return whether or not the player is overlapping the other rectangle
+ */
 bool player::overlapCheck(Rectangle otherRect){
     return CheckCollisionRecs(position,otherRect);
 }
 
+/**
+ * @brief checks if the players in on a ladder
+ * @return the value of onLadder
+ */
 bool player::getOnLadder(){
     return onLadder;
 }
 
+/**
+ * @brief sets the value of onLadder
+ * @param val new state for onLadder
+ */
 void player::setOnLadder(bool val){
     onLadder = val;
 }
-void player::lrInputCheck(){
+
+/**
+ * 
+ */
+void player::InputCheck(){
     if (VertColDir != NONE || HorColDir != NONE){
         wallJumped = false;
     }
