@@ -21,11 +21,11 @@ class player{
         int VertColDir = NONE;
         int HorColDir = NONE;
         bool onLadder = false;
-        bool onZip = false;
         bool win = false;
         bool dead = false;
         Rectangle zipTarget;
         Texture2D* texture;
+        bool onZip = false;
     public:
         //x,y,width,height
         player(Texture2D* playerTexture){
@@ -34,6 +34,8 @@ class player{
         Rectangle position = {500,500,50,100};
 
         void setVelocity(Vector2 v);
+        bool isZipping();
+        void changeTexture(Texture2D* changeTo);
         bool checkWin();
         void changeWinState(bool isWin);
         bool isDead();
@@ -43,7 +45,7 @@ class player{
         void collisionCheck(Rectangle otherRect);
         bool overlapCheck(Rectangle otherRect);
         void Draw(){
-            DrawRectangleRec(position,{23,47,63,255});
+            DrawTexturePro(*texture, {0,0,50,100}, position, (Vector2){0, 0}, 0,  WHITE);
         }
         bool getOnLadder();
         void setOnLadder(bool val);

@@ -188,6 +188,21 @@ bool player::checkWin(){
 }
 
 /**
+ * @brief Getter for if the player is zipping
+ * @return zipping status
+ */
+bool player::isZipping(){
+    return onZip;
+}
+
+/**
+ * @brief Setter for player texture
+ */
+void player::changeTexture(Texture2D* changeTo){
+    texture = changeTo;
+}
+
+/**
  * @brief Setter for the win state
  * @param isWin new value for the win state
  */

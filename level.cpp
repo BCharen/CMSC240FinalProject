@@ -141,14 +141,14 @@
      * @brief Draws the note sprite in the level
      */
     void Message::drawTexture(){
-        DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, shape, (Vector2){0, 0}, 0,  WHITE);
+        DrawTexturePro(*note, Rectangle{0, 0, (float)note->width, (float)note->height}, {shape.x, shape.y, (float)note->width, (float)note->height}, (Vector2){0, 0}, 0,  WHITE);
     }
 
     /**
      *  @brief the note sprite while reading it.
      */
     void Message::renderReadMessage(){
-        DrawTexturePro(*note, Rectangle{0, 0, 20, 30}, Rectangle{200, 150, shape.width * 25, shape.height * 25}, (Vector2){0, 0}, 0,  WHITE);
+        DrawTexturePro(*note, Rectangle{0, 0, (float)note->width, (float)note->height}, Rectangle{200, (1050 - (float)note->height * 25) / 2, (float)note->width * 25, (float)note->height * 25}, (Vector2){0, 0}, 0,  WHITE);
     }
 
     /**
