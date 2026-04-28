@@ -29,6 +29,7 @@ class player{
         //x,y,width,height
         Rectangle position = {500,500,50,100};
 
+        void setVelocity(Vector2 v);
         bool checkWin();
         void changeWinState(bool isWin);
         bool isDead();
