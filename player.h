@@ -13,6 +13,7 @@ enum Directions{
     DOWN,
     RIGHT
 };
+
 class player{
     private:
         Vector2 velocity = {0,0};

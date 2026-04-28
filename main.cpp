@@ -96,16 +96,35 @@ level testLevel = {
 {{900,500,25,100} , {3500,1300,25,100}, &win}
 };
 
+// level level3 = {
+// { Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} , Rectangle{3500,600,400,50} },  
+// { key{Rectangle{50,550,30,10}} , key{Rectangle{0,550,30,10}}},
+// { door{Rectangle{300,450,20,150}} , door{Rectangle{3500,650,20,150}}},
+// { Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
+// { m2 },
+// { Zipline{Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , Zipline{Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}},
+// {},
+// {500, 500},
+// {{3600,700,25,100} , {5000,900,25,100}, &win}
+// };
 level level3 = {
-{ Rectangle{0,600,900,50} , Rectangle{2500,1200,600,50} , Rectangle{3100,800,600,50}, Rectangle{3500,-300,300,50} , Rectangle{3500,600,400,50} },  
-{ key{Rectangle{50,550,30,10}} , key{Rectangle{0,550,30,10}}},
-{ door{Rectangle{300,450,20,150}} , door{Rectangle{3500,650,20,150}}},
-{ Rectangle{3000,700,50,500},  Rectangle{3400,-400,50,1200}},
-{ m2 },
-{ Zipline{Rectangle{800,500,25,100},Rectangle{2550,1100,25,100}} , Zipline{Rectangle{3700,-400,25,100},Rectangle{150,500,25,100}}},
+{Rectangle{0,0,2900,200}, Rectangle{0,600,2900,200}, Rectangle{0,2000,3200,200}, // mass h floors
+Rectangle{0,800,200,1400}, Rectangle{2700,1400,200,600}, // mass v floors
+Rectangle{800,200,100,250}, Rectangle{2100,200,100,250}, Rectangle{2800,200,100,250}, Rectangle{2100,800,100,250}, Rectangle{2800,800,100,250}, // door tops
+Rectangle{200,1000,400,200}, Rectangle{400,1200,200,200}, Rectangle{1000,1100,200,300}, Rectangle{1600,1200,200,200}, Rectangle{2100,1200,800,200}, // platforms row 1
+Rectangle{400,1600,200,200}, Rectangle{1000,1600,200,200}, Rectangle{1600,1600,700,200}, // platforms row 2
+Rectangle{2100,1400,100,50}, Rectangle{2100,1800,100,50}, // short door tops
+},
+{key{Rectangle{285,1945,30,10}}, key{Rectangle{2485,1945,30,10}}, key{Rectangle{3035,1945,30,10}}}, 
+{door{Rectangle{840,450,20,150}}, door{Rectangle{2140,450,20,150}}, door{Rectangle{2840,450,20,150}}, door{Rectangle{2140,1050,20,150}}, door{Rectangle{2840,1050,20,150}}, door{Rectangle{2140,1450,20,150}}, door{Rectangle{2140,1850,20,150}}, },
+{Rectangle{625,1000,50,1000}, Rectangle{925,1100,50,900}, Rectangle{1225,1100,50,900}, Rectangle{1525,1200,50,800}, Rectangle{2025,1200,50,400}, Rectangle{2925,400,50,1600}, Rectangle{3125,400,50,1600}, },
 {},
-{500, 500},
-{{3600,700,25,100} , {5000,900,25,100}, &win}
+{},
+{Obstacle{80,80,50,{610,800},{610,1900}}, Obstacle{80,80,60,{910,900},{910,1900}}, Obstacle{80,80,70,{1210,900},{1210,1900}}, Obstacle{80,80,80,{1510,1000},{1510,1900}}, 
+Obstacle{80,80,40,{310,1910},{2010,1911}}, 
+Obstacle{80,80,60,{2910,100},{2910,1900}}, Obstacle{80,80,40,{3010,100},{3010,1900}}, Obstacle{80,80,80,{3110,100},{3110,1900}}, },
+{300,900},
+{{0, 540, 50, 50}, &win}
 };
 
 level level2 = {
@@ -414,7 +433,7 @@ int main () {
         currentLevelSet = &levelSet1; 
     }
 
-    startingLevel = (*currentLevelSet)[0];
+    startingLevel = (*currentLevelSet)[2];
     currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);

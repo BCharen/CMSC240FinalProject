@@ -9,8 +9,6 @@ void player::collisionCheck(Rectangle otherRect){
         return;
     }
 
-    //Need to rework collision check and repositioning, flawed for standing on moving non-dangerous obstacles
-
     if(otherRect.y+otherRect.height >= position.y && (otherRect.height+otherRect.y-position.y<=6) && (otherRect.x >= position.x+position.width || otherRect.x+otherRect.width <= position.x)){
         VertColDir = UP;
         velocity.y = 0;
@@ -140,7 +138,7 @@ void player::startZip(Rectangle start, Rectangle end){
     zipVelocity = Vector2Normalize({end.x-start.x,end.y-start.y}) * 2;
     zipTarget = end;
     onZip = true;
-    }
+    }   
 }
 
 /**
