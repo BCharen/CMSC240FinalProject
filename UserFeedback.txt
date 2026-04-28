@@ -1,0 +1,50 @@
+Initial Feedback
+
+Osman:  CS major and frequent gamer. His feedback will allow us to determine how an experienced gamer might react to our game’s story & overall design.
+Very good, very barebones, but thoughtful in its design. It brought me great joy. I was able to skip a door by jumping over it and finishing the level early.
+I’d recommend adding more things to interact with, and maybe emotes
+Suyash:  CS major, although does not play games often. His feedback will allow us to determine how to strike a balance between an intuitive & complex gameplay loop.
+The controls were not obvious, so I’d recommend adding a tutorial level or page before the game begins. However the gameplay is interesting and the theme is endearing. Would love to see it extended to more levels.
+Kiet:  Horror and atmospheric game enthusiast. His feedback will help us determine how well our game fares as a whole, when gameplay, story and atmosphere combine.
+It took me an amount of time to find the pibble room. Thankfully the quirks in  mechanics allowed the ladders to work pretty seamlessly. Our next addition will definitely be readability and clearly communicating game instructions/mechanics.
+Ben:  Outside the CS scene, but still well-versed in gaming. His feedback would assist the final polish/evolution of the game and its vision.
+Weird lil box moving around, I like it. The ziplines are fun and the interactive elements definitely work as intended. But since you have to restart the game every time you fall off the map, maybe make it harder to leave and safeguard level skips.
+
+
+Final Product
+
+Suyash’s Feedback
+-Gameplay: 5
+-Ingame areas: 5
+-Interactive environment: 5
+-Audio: 5
+-Story: 5
+-Ease of use: 3
+=>Average: 4.67
+
+Kiet’s Feedback
+-Gameplay: 4
+-Ingame areas: 4
+-Interactive environment: 5
+-Audio: 5
+-Story: 5
+-Ease of use: 4
+=>Average: 4.5
+
+Osman’s Feedback
+-Gameplay: 5
+-Ingame areas: 3
+-Interactive environment: 5
+-Audio: 5
+-Story: 5
+-Ease of use: 3
+=>Average: 4.33
+
+Ben's Feedback
+-Gameplay: 5
+-Ingame areas: 5
+-Interactive environment: 5
+-Audio: 5
+-Story: 5
+-Ease of use: 4
+=>Average: 4.84
