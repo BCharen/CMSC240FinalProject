@@ -92,27 +92,20 @@
 
     vector<string> Message::wrapText(float maxWidth) {
         vector<string> lines;
-
         string currentLine = "";
         string word = "";
-
         for (int i = 0; text[i] != '\0'; i++) {
             char c = text[i];
-
             if (c == ' ' || c == '\n') {
                 string testLine = currentLine.empty() ? word : currentLine + " " + word;
-
                 Vector2 size = MeasureTextEx(GetFontDefault(), testLine.c_str(), FONTSIZE, 2.0f);
-
                 if (size.x > maxWidth) {
                     if (!currentLine.empty()) lines.push_back(currentLine);
                     currentLine = word;
                 } else {
                     currentLine = testLine;
                 }
-
                 word = "";
-
                 if (c == '\n') {
                     lines.push_back(currentLine);
                     currentLine = "";
@@ -121,13 +114,10 @@
                 word += c;
             }
         }
-
         // last word
         if (!word.empty()) {
             string testLine = currentLine.empty() ? word : currentLine + " " + word;
-
             Vector2 size = MeasureTextEx(GetFontDefault(), testLine.c_str(), FONTSIZE, 2.0f);
-
             if (size.x > maxWidth) {
                 if (!currentLine.empty()) lines.push_back(currentLine);
                 lines.push_back(word);
@@ -135,12 +125,9 @@
                 currentLine = testLine;
             }
         }
-
         if (!currentLine.empty()) lines.push_back(currentLine);
-
         return lines;
     }
-
 
     Rectangle Message::getShape(){
         return shape;
