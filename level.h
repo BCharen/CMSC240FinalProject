@@ -75,7 +75,7 @@ class Message{
 
     Vector2 getCenteredPosition();
 
-    vector<string> wrapText(float maxWidth);
+    vector<string> wrapText();
 
     void drawTextScreen();
 

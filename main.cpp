@@ -8,7 +8,7 @@
 using namespace std;
 
 #define TEST false
-#define KILLZONE 1400
+#define KILLZONE 2000
 #define FPS 60
 
 AudioManager songs = AudioManager();
@@ -18,18 +18,20 @@ Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
 Rectangle obstacleTextureDimensions{0,0,1220,780};
 Rectangle currentLadder = defaultRectangle;
 
-int screenWidth = 1920;
-int screenHeight = 1080;
-Color darkGreen = {43, 51, 24, 255};
-Color keyColor = {242,132,17,255};
-player zippy = player();
-Camera2D cam = { 0 };
-
 Texture2D pib;
 Texture2D labDoor;
 Texture2D obstacleTexture;
 Texture2D defaultMessageTexture;
 Texture2D note;
+Texture2D pointOfInterest;
+Texture2D playerTexture;
+
+int screenWidth = 1920;
+int screenHeight = 1080;
+Color darkGreen = {43, 51, 24, 255};
+Color keyColor = {242,132,17,255};
+player zippy = player(&playerTexture);
+Camera2D cam = { 0 };
 
 bool toggleDrawInventory = false;
 int inventoryIndex = 0;
@@ -100,15 +102,15 @@ level level2 = {
 };
 
 level intro1 = {
-{ Rectangle{-1800,600,2100,2000}, {1500,800,500,2000} },
-{  },
-{  },
-{  },
+{ Rectangle{-1150,600,1450,1000}, Rectangle{-2400,600,1100,2000}, Rectangle{-2400,1800,2700,1000}, Rectangle{1500,800,350,400}, Rectangle{1500,1400,2000,2000}, Rectangle{2000,800,2000,2000}, Rectangle{2200,300,25,400}, Rectangle{2200,300,800,25}, Rectangle{2200,550,700,25}, Rectangle{3000,300,25,400}},
+{ key{Rectangle{-1000,1750,30,10}}, key{Rectangle{2250,500,30,10}} },
+{ door{Rectangle{2200,650,25,150}}, door{Rectangle{3000,650,25,150}} },
+{ Rectangle{-1265,600,80,1200}, Rectangle{2925,550,50,250} },
 { m1 },
-{ Zipline{Rectangle{250,500,25,100},Rectangle{1550,700,25,100}} },
+{ Zipline{Rectangle{250,500,25,100},Rectangle{1550,700,25,100}}, Zipline{Rectangle{1550,1300,25,100},Rectangle{250,1700,25,100}} },
 {},
 {50,500},
-{{1900, 700, 25, 100}, {3000, 900, 25, 100}, &level2}
+{{3950, 700, 25, 100}, {5200, 900, 25, 100}, &level2}
 };
 
 vector<level*> levelSet1 = {&intro1,&level2,&win};
@@ -383,6 +385,8 @@ int main () {
     labDoor = LoadTexture("textures/door.png"); 
     obstacleTexture = LoadTexture("textures/danger.png"); 
     note = LoadTexture("textures/note.png");
+    pointOfInterest = LoadTexture("textures/pointofinterest.png");
+    playerTexture = LoadTexture("textures/playerTexture.png");
 
 
     //connect doors and keys
@@ -394,6 +398,10 @@ int main () {
     level2.keys[0].name = "First Door Key";
     level2.doors[1].correspondingKey = &level2.keys[1];
     level2.keys[1].name = "Second Door Key";
+    intro1.doors[0].correspondingKey = &intro1.keys[0];
+    intro1.keys[0].name = "P.R.F entrance key";
+    intro1.doors[1].correspondingKey = &intro1.keys[1];
+    intro1.keys[1].name = "Backdoor key";
 
     //Introduction screen
 
@@ -442,7 +450,7 @@ int main () {
                 }
                 if(readState){
                     zippy.setVelocity({0,0});
-                    vector<string> linesOfText = currentMessage.wrapText(800);
+                    vector<string> linesOfText = currentMessage.wrapText();
                     currentMessage.renderReadMessage();
                     if (IsKeyPressed(KEY_E)){
                         currentMessage = defaultMessage;

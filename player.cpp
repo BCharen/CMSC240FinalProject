@@ -77,7 +77,7 @@ void player::InputCheck(){
     if (VertColDir != NONE || HorColDir != NONE){
         wallJumped = false;
     }
-    
+
     if (wallJumped){
         if (velocity.x > 0){
             if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
@@ -98,10 +98,10 @@ void player::InputCheck(){
                 velocity.x = -1;
             }
         }
-        
+
         return;
     }
-    
+
     if(IsKeyDown(KEY_LEFT)||IsKeyDown(KEY_A)){
         velocity.x = -5;
     }
@@ -109,7 +109,7 @@ void player::InputCheck(){
     else if(IsKeyDown(KEY_RIGHT)||IsKeyDown(KEY_D)){
         velocity.x = 5;
     } 
-    
+
     else{
         velocity.x = 0;
     }

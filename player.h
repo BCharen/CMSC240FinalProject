@@ -25,8 +25,12 @@ class player{
         bool win = false;
         bool dead = false;
         Rectangle zipTarget;
+        Texture2D* texture;
     public:
         //x,y,width,height
+        player(Texture2D* playerTexture){
+            texture = playerTexture;
+        };
         Rectangle position = {500,500,50,100};
 
         void setVelocity(Vector2 v);
