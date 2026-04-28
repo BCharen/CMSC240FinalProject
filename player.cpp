@@ -66,7 +66,7 @@ void player::setOnLadder(bool val){
 }
 
 /**
- * 
+ * @brief handles all input for player movement
  */
 void player::InputCheck(){
     if (VertColDir != NONE || HorColDir != NONE){
@@ -127,6 +127,11 @@ void player::InputCheck(){
     }
 }
 
+/**
+ * @brief starts the player along a zipline
+ * @param start the starting pole for the zipline
+ * @param end the ending pole for the zipline
+ */
 void player::startZip(Rectangle start, Rectangle end){
     if (start.y <= end.y){
     position.x = start.x;
@@ -137,22 +142,42 @@ void player::startZip(Rectangle start, Rectangle end){
     }
 }
 
+/**
+ * @brief Getter for if the player has won
+ * @return the state of win
+ */
 bool player::checkWin(){
     return win;
 }
 
+/**
+ * @brief Setter for the win state
+ * @param isWin new value for the win state
+ */
 void player::changeWinState(bool isWin){
     win = isWin;
 }
 
+/**
+ * @brief Getter for if the player has died
+ * @return the state of dead
+ */
 bool player::isDead(){
     return dead;
 }
 
+/**
+ * @brief Setter for dead state
+ * @param isDead new value for dead state
+ */
 void player::changeDeadState(bool isDead){
     dead = isDead;
 }
 
+/**
+ * @brief spawns the player in the level
+ * @param lvl the current level to spawn into
+ */
 void player::spawn(level* lvl){
     onZip = false;
     zipVelocity = {0, 0};
