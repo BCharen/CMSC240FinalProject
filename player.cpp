@@ -66,7 +66,6 @@ void player::setOnLadder(bool val){
 }
 
 /**
- * 
  * @brief handles all input for player movement
  */
 void player::InputCheck(){

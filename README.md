@@ -1,25 +1,29 @@
-# Raylib C++ Starter Template
+# Zipline Simulator
 
-Raylib C++ Starter Template for Visual Studio Code on Windows.
+## Group Members
 
-This demo project contains a bouncing ball raylib example program.
+- Brendan Charen
+- Kiet
+- Mitch 
 
-It works with raylib version 4.5.
-Tested on both Windows 10 and Windows 11.
+## Purpose and Description
 
-# Video Tutorial
+ADD DESCRIPTION 
 
-<p align="center">
-  <img src="preview.jpg" alt="" width="800">
-</p>
+## Libraries Required
 
-<p align="center">
-🎥 <a href="https://www.youtube.com/watch?v=PaAcVk5jUd8">Video Tutorial on YouTube</a>
-</p>
+raylib -- install on windows from [raylib.com](https://www.raylib.com/index.html)
 
-<br>
-<br>
-<p align="center">
-| 📺 <a href="https://www.youtube.com/channel/UC3ivOTE5EgpmF2DHLBmWIWg">My YouTube Channel</a>
-| 🌍 <a href="https://www.programmingwithnick.com">My Website</a> | <br>
-</p>
+## Compilation and Usage
+
+While in VSCode, click F5
+
+## Example Usage
+
+![Image Down](Example1.png)
+![Image Down](Example2.png)
+
+## AI Usage
+
+REPLACE THESE LINES AND ADD YOUR USAGE
+A section describing any AI tools used (including chat conversation links).

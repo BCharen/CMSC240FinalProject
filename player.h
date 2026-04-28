@@ -41,7 +41,6 @@ class player{
         vector<key> keysInInventory = {};
         bool wallJumped = false;
         void collisionCheck(Rectangle otherRect);
-        bool keyCheck(Rectangle otherRect);
         bool overlapCheck(Rectangle otherRect);
         void Draw(){
             DrawRectangleRec(position,{23,47,63,255});
