@@ -10,7 +10,6 @@ AudioManager::AudioManager(){
 }
 
 Sound* AudioManager::getCurSong(){
-    //cout << soundtrack.empty() << endl;
     switch (curSong)
     {
         case 0:

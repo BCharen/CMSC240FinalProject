@@ -1,3 +1,8 @@
+/**
+ * @file level.cpp
+ * @brief All of the blocks that build up the level are stored here.
+ */
+
 #ifndef level_h
 #define level_h
 
@@ -79,9 +84,7 @@ class Message{
     void renderReadMessage();
 
     Rectangle getShape();
-
-    Color getColor();
-
+    
     Texture2D getNote();
 };
 
@@ -107,6 +110,7 @@ class LevelObjective : public Zipline{
 
     Rectangle getPoleTwo();
 };
+
 
 struct level {
     vector<Rectangle> walls;
