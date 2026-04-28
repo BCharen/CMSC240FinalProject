@@ -129,7 +129,6 @@ level* startingLevel;
 void restartLevel(level* lvl){
     for (auto &key : (*lvl).keys){
         key.setShow(true);
-        zippy.keysInInventory.clear();
     }
 }
 
@@ -375,14 +374,13 @@ void updateAudio(AudioManager songs){
  * @brief Runs the game
  */
 int main () {
-
     if(TEST){
         currentLevelSet = &levelSetTest; 
     } else {
         currentLevelSet = &levelSet1; 
     }
 
-    startingLevel = (*currentLevelSet)[1];
+    startingLevel = (*currentLevelSet)[0];
     currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);

@@ -17,7 +17,6 @@ void player::collisionCheck(Rectangle otherRect){
     }
     else if(otherRect.y <= position.y+position.height && (otherRect.x <= position.x+position.width || otherRect.x+otherRect.width >= position.x)){
         VertColDir = DOWN;
-        isJumping = false;
         velocity.y = 0;
     }
 
@@ -58,15 +57,12 @@ bool player::getOnLadder(){
     return onLadder;
 }
 
+
 /**
  * @brief sets the value of onLadder
  * @param val new state for onLadder
  */
 void player::setOnLadder(bool val){
-    if(isJumping) {
-        onLadder = false;
-        return;
-    }
     onLadder = val;
 }
 
@@ -225,6 +221,7 @@ void player::spawn(level* lvl){
     zipTarget = {0, 0};
     onLadder = false;
     wallJumped = false;
+    keysInInventory.clear();
     position.x = (*lvl).spawnpoint.x;
     position.y = (*lvl).spawnpoint.y;
     velocity.x = 0;
