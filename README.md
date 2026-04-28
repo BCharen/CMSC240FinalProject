@@ -6,9 +6,10 @@
 - Kiet Lam
 - Mitch Parker
 
-## Purpose and Description
+## Purpose 
+Students working on their finals need something to waste time on (Because games hit harder when you have stuff to do)
 
-ADD DESCRIPTION 
+## Description
 
 ## Libraries Required
 
