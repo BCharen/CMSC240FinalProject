@@ -1,0 +1,18 @@
+April 5, 2026 at 11:04 PM - Added Player with Movement Capabilities
+April 9, 2026 at 4:42 PM - Added Wall Collisions
+April 9, 2026 at 5:11 PM - Added Keys and Doors
+April 9, 2026 at 8:23 PM - Added Ladders and Messages
+April 9, 2026 at 8:59 PM - Added Ziplines
+April 10, 2026 at 4:35 AM - Demo Level Completed
+April 10, 2026 at 11:39 PM - Reworked Key/Door system and added reset upon falling off the map
+April 15, 2026 at 2:52 PM - Reworked Message system
+April 16, 2026 at 1:00 AM - Added Jumping
+April 16, 2026 at 4:17 PM - Added Level Transitions
+April 19, 2026 at 6:41 PM - Added Moving Obstacles
+April 19, 2026 at 9:59 PM - Added Inventory for Keys
+April 27, 2026 at 9:34 PM - Added Audio System
+April 28, 2026 at 2:08 AM - Added First Level
+April 28, 2026 at 5:32 AM - Added Player Skin
+April 28, 2026 at 7:31 AM - Added Second Level
+
+
