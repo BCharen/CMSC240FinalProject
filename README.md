@@ -7,9 +7,10 @@
 - Mitch Parker
 
 ## Purpose 
-Students working on their finals need something to waste time on (Because games hit harder when you have stuff to do)
+Students working on their finals need ways to destress, and a quick little game can be a great way to take their minds off studying for a little bit.
 
 ## Description
+A platformer with the goal of finding the "pib", while uncovering a story along the way.
 
 ## Libraries Required
 
