@@ -11,7 +11,7 @@ using namespace std;
 #define KILLZONE 1400
 #define FPS 60
 
-AudioManager songs;
+AudioManager songs = AudioManager();
 
 Rectangle defaultRectangle{0,0,0,0};
 Rectangle labDoorDimensions{29,23,63-29 + 1, 76-23 + 1};
@@ -219,6 +219,8 @@ void updateEnvironment(level &curLevel){
             currentMessage = loadingScreen;
             currentLevel = curLevel.objective.getConnectedLevel();
             drawState = true;
+            StopSound(*songs.getCurSong());
+            songs.nextSong();
             zippy.spawn(currentLevel);
         }
     }
@@ -330,20 +332,14 @@ void updateCam(Camera2D *camera, player *play){
 }
 
 void updateAudio(AudioManager songs){
-    if(songs.getValidSongs()){
-        if(!IsMusicStreamPlaying(songs.getCurSong())){
-            PlayMusicStream(songs.getCurSong());
+    Sound s = *songs.getCurSong();
+        if(!IsSoundPlaying(s)){
+            PlaySound(s); 
         }
-    }
 }
 
-void loadSongs(AudioManager songs){
-    const char* song1 = "test.mp3";
-    songs.loadSong(song1);
-}
 
 int main () {
-    loadSongs(songs);
 
     if(TEST){
         currentLevelSet = &levelSetTest; 
@@ -390,6 +386,7 @@ int main () {
     SetTargetFPS(FPS);
     while (WindowShouldClose() == false){
         updateCam(&cam, &zippy);
+        updateAudio(songs);
         BeginDrawing();
         ClearBackground(BLACK);
             if(drawState){
@@ -414,7 +411,6 @@ int main () {
             } else {
                 BeginMode2D(cam);
                 updateEnvironment(*currentLevel);
-                updateAudio(songs);
                 zippy.Draw();
                 if(!readState){
                     zippy.lrInputCheck();
@@ -451,6 +447,7 @@ int main () {
             }
         EndDrawing();
     }    
+    songs.unloadAll();
     CloseWindow();
 }
 

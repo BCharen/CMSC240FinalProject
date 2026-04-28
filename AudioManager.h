@@ -6,13 +6,15 @@
 using namespace std;
 class AudioManager{
     private:
-    vector<Music> soundtrack;
+    Sound level1Song; 
+    Sound level2Song;
+    Sound level3Song;
     int curSong;
-    bool validSongs;
     public:
-    void loadSong(const char *fileName);
-    Music getCurSong();
-    bool getValidSongs();
+    AudioManager();
+    Sound* getCurSong();
+    void nextSong();
+    void unloadAll();
 };
 
 #endif
