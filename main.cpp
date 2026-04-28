@@ -382,7 +382,7 @@ int main () {
     cam.offset = (Vector2){ screenWidth/2.0f, screenHeight/2.0f };
     cam.rotation = 0;
     cam.zoom = 1.0f;
-    InitWindow(screenWidth,screenHeight, "Zipline Zim");
+    InitWindow(screenWidth,screenHeight, "Zipline Simulator");
 
     /*
     Load textures
