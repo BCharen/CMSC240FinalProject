@@ -46,8 +46,10 @@ Message winMessage{0, 0, "You found pibble! Win or something", &defaultMessageTe
 Message loseMessage{0, 0, "You fell off the map :(", &defaultMessageTexture};
 Message touchObstacleMessage{0, 0, "You touched the danger :(", &defaultMessageTexture};
 Message loadingScreen{0, 0, "Loading...", &defaultMessageTexture};
-Message m1{150,550, "I need to find pibble, but how? \n Pibble Pibble Pibble Pibble Pibble Pibble \n i like femboys", &note};
+Message m1{150,550, "It's getting dark, I need to find a way down \n  I remember seeing a zipline around here", &note};
 Message m2{3450,750, "How do I unlock this door?", &note};
+
+
 /*
 Each line is a different type of object. In order they are:
 walls: Rectangle for position.
@@ -97,8 +99,8 @@ level level2 = {
 {{3600,700,25,100} , {5000,900,25,100}, &win}
 };
 
-level level1 = {
-{ Rectangle{-800,600,1100,1000}, {1500,800,500,1000} },
+level intro1 = {
+{ Rectangle{-1800,600,2100,2000}, {1500,800,500,2000} },
 {  },
 {  },
 {  },
@@ -109,7 +111,7 @@ level level1 = {
 {{1900, 700, 25, 100}, {3000, 900, 25, 100}, &level2}
 };
 
-vector<level*> levelSet1 = {&level1,&level2,&win};
+vector<level*> levelSet1 = {&intro1,&level2,&win};
 vector<level*> levelSetTest = {&testLevel,&win};
 
 
@@ -444,6 +446,8 @@ int main () {
 
                 if(toggleDrawInventory){
                     drawInventory();
+                } else {
+                    DrawText("Tab - Inventory", 50, 75, 25, WHITE);
                 }
                 if(readState){
                     zippy.setVelocity({0,0});
