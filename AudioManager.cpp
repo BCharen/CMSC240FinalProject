@@ -1,5 +1,8 @@
 #include "AudioManager.h"
 
+/**
+ * @brief Initializes an AudioManager with all of the level songs
+ */
 AudioManager::AudioManager(){
     InitAudioDevice();
     SetMasterVolume(0.3);
@@ -9,6 +12,10 @@ AudioManager::AudioManager(){
     curSong = 0;
 }
 
+/**
+ * @brief Getter for the current song
+ * @return returns a pointer to the current song
+ */
 Sound* AudioManager::getCurSong(){
     switch (curSong)
     {
@@ -27,11 +34,21 @@ Sound* AudioManager::getCurSong(){
     }
 }
 
+/**
+ * @brief switches the song to the next song
+ */
 void AudioManager::nextSong(){
+    
     curSong = (curSong + 1) % 3; 
 }
 
+/**
+ * @brief unloads all audio
+ */
 void AudioManager::unloadAll(){
     cout << "unloading songs" << endl;
+    UnloadSound(level1Song);
+    UnloadSound(level2Song);
+    UnloadSound(level3Song);
     CloseAudioDevice();
 }
