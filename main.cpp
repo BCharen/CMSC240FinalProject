@@ -50,9 +50,13 @@ Message loseMessage{0, 0, "You fell off the map :(", &defaultMessageTexture};
 Message touchObstacleMessage{0, 0, "You touched the danger :(", &defaultMessageTexture};
 Message loadingScreen{0, 0, "Loading...", &defaultMessageTexture};
 Message m1{150,550, "It's getting dark, I need to find a way down \nI remember seeing a zipline around here", &pointOfInterest};
-Message m2{3450,750, "How do I unlock this door?", &pointOfInterest};   
+Message m2{3450,750, "How do I unlock this door?", &pointOfInterest};  
+Message m3{-100,-1550, "What is this building?\nI see a large logo in the distance\nP.R.F?", &pointOfInterest};
 Message l1{-900,1750, "September 29th, 2024 \nOrder to P.R.F: \n50 cans Sweet Corn, 100 cans Beans, 100 cans Chili,\n80 cans Tomato Soup, 20 cans Bacon, \nDeliver by September 30th 10:00 am.\nSidenote: What an unusual order for a company party.\nCustomer said we aren't allowed to enter any other room. \nI guess I won't question it.", &note};
 Message l2{2300, 500, "September 27th, 2024 \nThere's a company party next Monday night in the basement.\nThe way everyone talks about it that feels off.\nHR asked us to fill a form so they can decide the menu.\nThe options were all canned food, which makes no sense.\nMr. Spencer said it's to celebrate recent research advances?\nand made a point of telling me to attend.\nI'm supposed to be down there at 7:00.\n I'll go anyway. It's just a party.", &note};
+Message l3{-2400, -1050, "Welcome, esteemed visitors, to P.R.F!\nPlease remain in approved visitor areas at all times\nand follow staff instructions without delay.\nFor your safety, do not enter restricted laboratories,\nstorage rooms, or basement levels\nunless escorted by authorized personnel.\nPhotography, recording, and contact with research specimens\nare strictly prohibited.\nAny unusual entity should be reported to security immediately.", &note};
+Message l4{2750, -950, "September 30th\nI've been ordered to guard the exits\nduring the party tonight and check for attendance.\nDon't know why that would be necessary\nespecially for a company party.\nAnyways, orders are orders, I don't wanna get fired.", &note};
+Message l5{0, -550, "August 13th,\nSubject: Phase IV Results: Behavioral Conversion Success\nTo: Oswald Spencer\nI am pleased to report that Phase IV has met all objectives.\nSubjects consistently exhibit the target behavioral profile:\nheightened fixation, rapid response, and sustained engagement.\nMost notably, external perception remains advantageous.\nField observers uniformly underestimate the subjects contact.\nContainment protocols required minor revisions,\nbut the current measures are sufficient\nprovided they are strictly followed.\nI would strongly advise against unsupervised exposure,\nregardless of prior familiarity with the source animals.\nAwaiting your authorization to proceed to distribution.\nDr. Valessa Voss, Head of Research Department P.R.F", &note};
 
 
 /*
@@ -105,15 +109,19 @@ level level3 = {
 };
 
 level level2 = {
-{Rectangle{-1500,0,3500,3000}},
+{Rectangle{-5000,-1000,3000,3000}, Rectangle{-1300,-1200,1300,200}, Rectangle{-1300,-1190,600,490}, Rectangle{-600,-725,1000,25}, Rectangle{500,-1200,600,500},Rectangle{100,-1200,1000,200}, Rectangle{-250,-1500,525,25}, Rectangle{-250,-1490,25,190}, Rectangle{250,-1490,25,190},
+Rectangle{-2800,-1200,30,200}, Rectangle{-2800,-1200,100,30}, Rectangle{-2800,-1115,100,30}, Rectangle{-2730,-1200,30,115}, Rectangle{-2670,-1200,30,200}, Rectangle{-2670,-1200,100,30}, Rectangle{-2670,-1115,100,30}, Rectangle{-2600,-1200,30,115}, Rectangle{-2620,-1085,30,85}, Rectangle{-2540,-1200,30,200}, Rectangle{-2540,-1200,100,30}, Rectangle{-2540,-1115,85,30},
+Rectangle{2000,-900,500,200}, Rectangle{2000,-550,1000,3000}, Rectangle{2600,-900,400,3000}, Rectangle{2300,-1200,525,25}, Rectangle{2300,-1190,25,140}, Rectangle{2800,-1190,25,340},
+Rectangle{-1300,-500,1500,300}, Rectangle{300,-500,800,300}, Rectangle{-1300,-490,900,2500}, Rectangle{-400,-700,25,50}, Rectangle{375,-700,25,50},
+Rectangle{-400,0,1500,2000}},
+{key{Rectangle{2400,-950,30,10}}},
+{door{Rectangle{-250,-1350,25,150}}, door{Rectangle{250,-1350,25,150}}, door{Rectangle{2300,-1050,25,150}}, door{Rectangle{-400,-650,25,150}}, door{Rectangle{375,-650,25,150}}},
+{Rectangle{25,-1200,50,400}, Rectangle{-675,-725,50,225}, Rectangle{425,-725,50,225}, Rectangle{2525,-900,50,350}, Rectangle{225,-500,50,500}},
+{ m3, l3, l4, l5},
+{Zipline{Rectangle{-10000,-3000,25,100},Rectangle{0,-1600,25,100}} , Zipline{Rectangle{-1250,-1300,25,100},Rectangle{-2050,-1100,25,100}}, Zipline{Rectangle{-2050,-1100,25,100},Rectangle{-1250,-600,25,100}}, Zipline{Rectangle{1050,-1300,25,100},Rectangle{2050,-1000,25,100}}, Zipline{Rectangle{2050,-650,25,100},Rectangle{1050,-600,25,100}}},
 {},
-{},
-{},
-{},
-{Zipline{Rectangle{-10000,-3000,25,100},Rectangle{0,0,25,100}} , },
-{},
-{0,0},
-{{3950, 700, 25, 100}, {5200, 900, 25, 100}, &level3}
+{0,-1600},
+{{1050, -100, 25, 100}, {5200, 2000, 25, 100}, &level3}
 };
 
 level level1 = {
@@ -230,38 +238,6 @@ void updateEnvironment(level &curLevel){
     //Draw Pib texture
     Rectangle source = (Rectangle){0, 0, 767, 603};
 
-    //temporary implementation of win state
-    if(curLevel.objective.isThisPib()){
-        DrawTexturePro(pib, source, curLevel.objective.getPibShape(), (Vector2){25, 25}, 45 * GetTime(),  WHITE);
-        if (zippy.overlapCheck(curLevel.objective.getPibShape())){
-            zippy.changeWinState(true);
-            currentMessage = winMessage;
-            drawState = true;
-            return;
-        }
-    } else {
-        DrawRectangleRec(curLevel.objective.getPoleOne(),PINK);
-        DrawRectangleRec(curLevel.objective.getPoleTwo(),PINK);
-        DrawLineEx(curLevel.objective.getZipStart(),curLevel.objective.getZipEnd(),10,PINK);
-
-        if(zippy.overlapCheck(curLevel.objective.getPoleOne())){ 
-            if(IsKeyPressed(KEY_SPACE)){
-                zippy.startZip(curLevel.objective.pole1,curLevel.objective.pole2);
-                songs.setFading(true);
-            }
-        }
-
-        if(zippy.overlapCheck({(curLevel.objective.getPoleTwo().x + curLevel.objective.getPoleOne().x)/2, (curLevel.objective.getPoleTwo().y + curLevel.objective.getPoleOne().y)/2, 50, 50})){
-            currentMessage = loadingScreen;
-            currentLevel = curLevel.objective.getConnectedLevel();
-            drawState = true;
-            StopSound(*songs.getCurSong());
-            songs.nextSong();
-            songs.setFading(false);
-            zippy.spawn(currentLevel);
-        }
-    }
-
     //temporary implementation of dead state
     if (zippy.position.y > KILLZONE){
         zippy.changeDeadState(true);
@@ -313,7 +289,15 @@ void updateEnvironment(level &curLevel){
     }
 
     for (auto &door : curLevel.doors){
-        if(door.correspondingKey != nullptr && door.correspondingKey->show == false){
+        if(door.correspondingKey == nullptr){
+            if (zippy.overlapCheck(door.shape)){
+                DrawTexturePro(labDoor, labDoorDimensions, Rectangle{door.shape.x, door.shape.y, 75, 150}, (Vector2){0, 0}, 0,  WHITE);
+            } else {
+                DrawRectangleRec(door.shape, GRAY);
+                zippy.collisionCheck(door.shape);
+            }
+        }
+        else if (door.correspondingKey->show == false){
             if (zippy.overlapCheck(door.shape)){
                 DrawTexturePro(labDoor, labDoorDimensions, Rectangle{door.shape.x, door.shape.y, 75, 150}, (Vector2){0, 0}, 0,  WHITE);
             } else {
@@ -365,6 +349,36 @@ void updateEnvironment(level &curLevel){
         }
     }
 
+    if(curLevel.objective.isThisPib()){
+        DrawTexturePro(pib, source, curLevel.objective.getPibShape(), (Vector2){25, 25}, 45 * GetTime(),  WHITE);
+        if (zippy.overlapCheck(curLevel.objective.getPibShape())){
+            zippy.changeWinState(true);
+            currentMessage = winMessage;
+            drawState = true;
+            return;
+        }
+    } else {
+        DrawRectangleRec(curLevel.objective.getPoleOne(),PINK);
+        DrawRectangleRec(curLevel.objective.getPoleTwo(),PINK);
+        DrawLineEx(curLevel.objective.getZipStart(),curLevel.objective.getZipEnd(),10,PINK);
+
+        if(zippy.overlapCheck(curLevel.objective.getPoleOne())){ 
+            if(IsKeyPressed(KEY_SPACE)){
+                zippy.startZip(curLevel.objective.pole1,curLevel.objective.pole2);
+                songs.setFading(true);
+            }
+        }
+
+        if(zippy.overlapCheck({(curLevel.objective.getPoleTwo().x + curLevel.objective.getPoleOne().x)/2, (curLevel.objective.getPoleTwo().y + curLevel.objective.getPoleOne().y)/2, 50, 50})){
+            currentMessage = loadingScreen;
+            currentLevel = curLevel.objective.getConnectedLevel();
+            drawState = true;
+            StopSound(*songs.getCurSong());
+            songs.nextSong();
+            songs.setFading(false);
+            zippy.spawn(currentLevel);
+        }
+    }
         
 } 
 
@@ -400,7 +414,7 @@ int main () {
         currentLevelSet = &levelSet1; 
     }
 
-    startingLevel = (*currentLevelSet)[0];
+    startingLevel = (*currentLevelSet)[1];
     currentLevel = startingLevel;
 
     zippy.spawn(currentLevel);
@@ -432,8 +446,12 @@ int main () {
     level3.keys[0].name = "First Door Key";
     level3.doors[1].correspondingKey = &level3.keys[1];
     level3.keys[1].name = "Second Door Key";
+    level2.doors[0].correspondingKey = &level2.keys[0];
+    level2.doors[3].correspondingKey = &level2.keys[0];
+    level2.doors[4].correspondingKey = &level2.keys[0];
+    level2.keys[0].name = "P.R.F Gate Key";
     level1.doors[0].correspondingKey = &level1.keys[0];
-    level1.keys[0].name = "P.R.F entrance key";
+    level1.keys[0].name = "P.R.F Welcome Center key";
     level1.doors[1].correspondingKey = &level1.keys[1];
     level1.keys[1].name = "Backdoor key";
 
