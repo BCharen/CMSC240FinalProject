@@ -84,9 +84,7 @@ class Message{
     void renderReadMessage();
 
     Rectangle getShape();
-
-    Color getColor();
-
+    
     Texture2D getNote();
 };
 
